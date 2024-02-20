@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -17,10 +18,14 @@ const Menu = () => {
 					className={`md:flex md:items-center ${isOpen ? "block" : "hidden"}`}
 				>
 					<li className='m-2'>
-						<button onClick={() => setIsOpen(false)}>Strona główna</button>
+						<Link href='/'>
+							<button onClick={() => setIsOpen(false)}>Strona główna</button>
+						</Link>
 					</li>
 					<li className='m-2'>
-						<button onClick={() => setIsOpen(false)}>Docs</button>
+						<Link href='/pages/docs'>
+							<button onClick={() => setIsOpen(false)}>Docs</button>
+						</Link>
 					</li>
 					<li className='m-2'>
 						<button onClick={() => setIsOpen(false)}>Zarejestruj się</button>
