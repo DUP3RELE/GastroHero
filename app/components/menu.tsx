@@ -23,12 +23,14 @@ const Menu = () => {
 						</Link>
 					</li>
 					<li className='m-2'>
-						<Link href='/pages/docs'>
+						<Link href='/docs'>
 							<button onClick={() => setIsOpen(false)}>Docs</button>
 						</Link>
 					</li>
 					<li className='m-2'>
-						<button onClick={() => setIsOpen(false)}>Zarejestruj się</button>
+						<Link href='/userpanel/register'>
+							<button onClick={() => setIsOpen(false)}>Zarejestruj się</button>
+						</Link>
 					</li>
 				</ul>
 			</div>
