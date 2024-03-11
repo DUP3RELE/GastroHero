@@ -92,7 +92,7 @@ const Menu = () => {
 										Dokumentacja
 									</button>
 								</Link>
-								<Link href='/userpanel/register'>
+								<Link href='/pages/userpanel/register'>
 									<button
 										className='bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium'
 										aria-current='page'
@@ -100,7 +100,7 @@ const Menu = () => {
 										Zarejestruj się
 									</button>
 								</Link>
-								<Link href='/userpanel/login'>
+								<Link href='/pages/userpanel/login'>
 									<button
 										className='bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium'
 										aria-current='page'
