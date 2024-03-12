@@ -2,14 +2,14 @@
 import { useState, FormEvent } from "react";
 
 interface FormData {
-	name: string;
+	username: string;
 	email: string;
 	password: string;
 }
 
 export default function RegisterForm() {
 	const [formData, setFormData] = useState<FormData>({
-		name: "",
+		username: "",
 		email: "",
 		password: "",
 	});
@@ -22,10 +22,29 @@ export default function RegisterForm() {
 		}));
 	};
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		// Tutaj możesz dodać logikę przesyłania formularza, np. walidację i wysyłanie danych do API
-		console.log(formData);
+
+		try {
+			const response = await fetch("http://127.0.0.1:5000/api/register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log("Sukces:", data);
+				// Możesz tutaj przekierować użytkownika na inną stronę lub wyświetlić komunikat o powodzeniu
+			} else {
+				// Obsługa błędów odpowiedzi serwera, np. wyświetlenie komunikatu
+				console.error("Błąd serwera");
+			}
+		} catch (error) {
+			console.error("Błąd:", error);
+		}
 	};
 
 	return (
@@ -35,15 +54,15 @@ export default function RegisterForm() {
 		>
 			<div>
 				<label
-					htmlFor='name'
+					htmlFor='username'
 					className='block text-sm font-medium text-gray-700 dark:text-gray-200'
 				>
 					Imię
 				</label>
 				<input
 					type='text'
-					name='name'
-					value={formData.name}
+					name='username'
+					value={formData.username}
 					onChange={handleChange}
 					className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
 				/>
