@@ -57,7 +57,7 @@ export default function RegisterForm() {
 					htmlFor='username'
 					className='block text-sm font-medium text-gray-700 dark:text-gray-200'
 				>
-					Imię
+					Nazwa Restauracji
 				</label>
 				<input
 					type='text'
