@@ -1,6 +1,6 @@
-// LoginForm.tsx
 "use client";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface LoginFormData {
 	email: string;
@@ -12,6 +12,15 @@ export default function LoginForm() {
 		email: "",
 		password: "",
 	});
+
+	const router = useRouter();
+
+	// useEffect(() => {
+	// 	const isLogged = true;
+	// 	if (isLogged) {
+	// 		router.push("./pages/userpanel/login/success");
+	// 	}
+	// }, []);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -25,7 +34,7 @@ export default function LoginForm() {
 		e.preventDefault();
 
 		try {
-			const response = await fetch("http://localhost:5000/api/login", {
+			const response = await fetch("http://127.0.0.1:5000/api/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -36,8 +45,8 @@ export default function LoginForm() {
 			if (response.ok) {
 				const data = await response.json();
 				console.log("Login successful:", data);
-				const { access_token } = await response.json();
-				localStorage.setItem("token", access_token);
+				localStorage.setItem("token", data.access_token);
+				router.push("./login/success");
 			} else {
 				console.error("Login failed");
 			}

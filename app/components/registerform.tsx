@@ -37,7 +37,7 @@ export default function RegisterForm() {
 			if (response.ok) {
 				const data = await response.json();
 				console.log("Sukces:", data);
-				// Możesz tutaj przekierować użytkownika na inną stronę lub wyświetlić komunikat o powodzeniu
+				// dodaj jakieś skierowanie na inną stronę np. userpage
 			} else {
 				// Obsługa błędów odpowiedzi serwera, np. wyświetlenie komunikatu
 				console.error("Błąd serwera");
