@@ -15,13 +15,6 @@ export default function LoginForm() {
 
 	const router = useRouter();
 
-	// useEffect(() => {
-	// 	const isLogged = true;
-	// 	if (isLogged) {
-	// 		router.push("./pages/userpanel/login/success");
-	// 	}
-	// }, []);
-
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setFormData((prevState) => ({
@@ -46,6 +39,7 @@ export default function LoginForm() {
 				const data = await response.json();
 				console.log("Login successful:", data);
 				localStorage.setItem("token", data.access_token);
+				localStorage.setItem("user_id", data.user_id.toString());
 				router.push("./login/success");
 			} else {
 				console.error("Login failed");
