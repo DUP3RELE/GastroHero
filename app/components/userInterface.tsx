@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Workers from "./datablocks/workers";
+import MealData from "./datablocks/restaurantData";
 
 interface UserData {
 	username: string;
@@ -39,13 +41,24 @@ const UserProfile: React.FC = () => {
 	}, []);
 
 	return (
-		<div>
-			{username ? (
-				<h1>Witaj, {username}!</h1>
-			) : (
-				<h1>Ładowanie danych użytkownika...</h1>
-			)}
-		</div>
+		<>
+			<div className='m-2'>
+				<div className='m-5'>
+					{username ? (
+						<h1>Witaj, {username}!</h1>
+					) : (
+						<h1>Ładowanie danych użytkownika...</h1>
+					)}
+				</div>
+				<div className='flex w-screen flex-wrap'>
+					<Workers />
+					<MealData />
+					<MealData />
+					<MealData />
+					<MealData />
+				</div>
+			</div>
+		</>
 	);
 };
 
