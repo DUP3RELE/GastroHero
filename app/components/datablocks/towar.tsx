@@ -5,15 +5,15 @@ export default function Workers() {
 		<>
 			<div className='w-1/4 m-3 p-3 rounded border shadow-lg dark:shadow-blue-800 shadow-blue-300'>
 				<div className='m-3'>
-					<p>Lista Pracowników</p>
+					<p>Zatowarowanie</p>
 				</div>
 				<div className='m-2'>
 					<ul>
-						<li>Pracownik 1</li>
-						<li>Pracownik 2</li>
-						<li>Pracownik 3</li>
-						<li>Pracownik 4</li>
-						<li>Pracownik 5</li>
+						<li>Mąka</li>
+						<li>Sól</li>
+						<li>Pieprz</li>
+						<li>Cukier</li>
+						<li>Masło</li>
 						<li>...</li>
 					</ul>
 				</div>
