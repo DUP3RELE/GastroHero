@@ -1,7 +1,7 @@
-'use client'
+"use client";
 import React from "react";
 import useAuthToken from "@/app/api/hooks/useAuthToken";
-import UserProfile from "@/app/components/userInterface";
+import UserProfile from "../../page";
 
 const SomePage: React.FC = () => {
 	const token = useAuthToken();

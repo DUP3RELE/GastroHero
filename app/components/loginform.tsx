@@ -40,7 +40,7 @@ export default function LoginForm() {
 				console.log("Login successful:", data);
 				localStorage.setItem("token", data.access_token);
 				localStorage.setItem("user_id", data.user_id.toString());
-				router.push("./login/success");
+				router.push("../userpanel");
 			} else {
 				console.error("Login failed");
 			}
