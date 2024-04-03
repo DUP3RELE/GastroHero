@@ -42,11 +42,6 @@ export default function UserProfile() {
 		fetchUsername();
 	}, []);
 
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		router.push("/");
-	};
-
 	return (
 		<div className='m-2'>
 			<div className='m-5'>
@@ -56,12 +51,6 @@ export default function UserProfile() {
 					<h1>Ładowanie danych użytkownika...</h1>
 				)}
 			</div>
-			<button
-				onClick={handleLogout}
-				className='top-0 left-0 m-5 px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700 transition'
-			>
-				Wyloguj się
-			</button>
 			<div className='flex w-screen flex-wrap'>
 				<Workers />
 				<MealData />

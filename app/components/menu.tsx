@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../api/hooks/useAuthToken";
 interface UserData {
 	username: string;
 }
@@ -10,7 +11,7 @@ interface UserData {
 const Menu = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { isAuthenticated, logout } = useAuth();
 	const [username, setUsername] = useState<string>("");
 	const router = useRouter();
 
@@ -48,15 +49,15 @@ const Menu = () => {
 		};
 		const token = localStorage.getItem("token");
 		if (token) {
-			setIsLoggedIn(true);
 			fetchUsername();
+		} else {
+			setUsername("");
 		}
-	}, []);
+	}, [isAuthenticated]);
 
 	const handleLogout = () => {
-		localStorage.removeItem("token");
+		logout();
 		router.push("/");
-		// window.location.reload()
 	};
 
 	return (

@@ -1,6 +1,7 @@
 "use client";
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../api/hooks/useAuthToken";
 
 interface LoginFormData {
 	email: string;
@@ -13,6 +14,7 @@ export default function LoginForm() {
 		password: "",
 	});
 
+	const { login } = useAuth();
 	const router = useRouter();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +43,7 @@ export default function LoginForm() {
 				localStorage.setItem("token", data.access_token);
 				localStorage.setItem("user_id", data.user_id.toString());
 				router.push("../userpanel");
+				login();
 			} else {
 				console.error("Login failed");
 			}
