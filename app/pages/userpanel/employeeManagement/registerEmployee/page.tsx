@@ -1,4 +1,4 @@
-import RegisterEmployeeForm from "@/app/components/registerEmployeeForm";
+import RegisterEmployeeForm from "@/app/components/createEmployeeForm";
 
 export default function RegisterEmployeePage() {
 	return (

@@ -5,19 +5,20 @@ import Workers from "@/app/components/datablocks/workers";
 import MealData from "@/app/components/datablocks/restaurantData";
 import { useRouter } from "next/navigation";
 
-interface UserData {
-	username: string;
+interface RestaurantData {
+	restaurantname: string;
 }
 
-export default function UserProfile() {
-	const [username, setUsername] = useState<string>("");
+export default function RestaurantProfile() {
+	const [restaurantName, setRestaurantName] = useState<string>("");
 	const router = useRouter();
 
 	useEffect(() => {
-		const fetchUsername = async () => {
+		const fetchRestaurantData = async () => {
 			const token = localStorage.getItem("token");
 			if (!token) {
 				console.error("Brak tokenu, użytkownik niezalogowany");
+				router.push("/login");
 				return;
 			}
 
@@ -30,23 +31,24 @@ export default function UserProfile() {
 				});
 
 				if (response.ok) {
-					const data: UserData = await response.json();
-					setUsername(data.username);
+					const data: RestaurantData = await response.json();
+					setRestaurantName(data.restaurantname);
 				} else {
-					throw new Error("Nie udało się pobrać danych");
+					throw new Error("Nie udało się pobrać danych restauracji");
 				}
 			} catch (error) {
 				console.error(error);
+				router.push("/login");
 			}
 		};
-		fetchUsername();
-	}, []);
+		fetchRestaurantData();
+	}, [router]);
 
 	return (
 		<div className='m-2'>
 			<div className='m-5'>
-				{username ? (
-					<h1>Witaj, {username}!</h1>
+				{restaurantName ? (
+					<h1>Witaj, {restaurantName}!</h1>
 				) : (
 					<h1>Ładowanie danych użytkownika...</h1>
 				)}

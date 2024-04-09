@@ -4,15 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../api/hooks/useAuthToken";
-interface UserData {
-	username: string;
+interface RestaurantData {
+	restaurantname: string;
 }
 
 const Menu = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
 	const { isAuthenticated, logout } = useAuth();
-	const [username, setUsername] = useState<string>("");
+	const [restaurantName, setRestaurantName] = useState<string>("");
 	const router = useRouter();
 
 	const handleClickOutside = (event: MouseEvent) => {
@@ -22,7 +22,7 @@ const Menu = () => {
 	};
 
 	useEffect(() => {
-		const fetchUsername = async () => {
+		const fetchRestaurantName = async () => {
 			const token = localStorage.getItem("token");
 			if (!token) {
 				console.error("Brak tokenu, użytkownik niezalogowany");
@@ -38,8 +38,8 @@ const Menu = () => {
 				});
 
 				if (response.ok) {
-					const data: UserData = await response.json();
-					setUsername(data.username);
+					const data: RestaurantData = await response.json();
+					setRestaurantName(data.restaurantname);
 				} else {
 					throw new Error("Nie udało się pobrać danych");
 				}
@@ -49,9 +49,9 @@ const Menu = () => {
 		};
 		const token = localStorage.getItem("token");
 		if (token) {
-			fetchUsername();
+			fetchRestaurantName();
 		} else {
-			setUsername("");
+			setRestaurantName("");
 		}
 	}, [isAuthenticated]);
 
@@ -137,7 +137,7 @@ const Menu = () => {
 										Dokumentacja
 									</button>
 								</Link>
-								{!username && (
+								{!restaurantName && (
 									<>
 										<Link href='/pages/userpanel/register'>
 											<button
@@ -157,10 +157,10 @@ const Menu = () => {
 										</Link>
 									</>
 								)}
-								{username && (
+								{restaurantName && (
 									<div className='relative group'>
 										<button className='text-white px-3 py-2 rounded-md text-sm font-medium bg-gray-900 cursor-default'>
-											{username}
+											{restaurantName}
 										</button>
 										<div className='absolute bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity'>
 											<Link href='/pages/userpanel'>

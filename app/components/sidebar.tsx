@@ -11,7 +11,7 @@ const Sidebar = () => {
 
 	return (
 		<div
-			className={`fixed top-0 right-0 h-full bg-gray-800 text-white transition-all duration-300 ease-in-out ${
+			className={`invisible fixed top-0 right-0 h-full bg-gray-800 text-white transition-all duration-300 ease-in-out ${
 				isOpen ? "w-64" : "w-16"
 			} md:w-64`}
 			onClick={toggleSidebar}

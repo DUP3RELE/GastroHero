@@ -1,18 +1,22 @@
 "use client";
 import { useState, FormEvent } from "react";
+import { useRegister } from "../api/register";
 
-interface FormData {
-	username: string;
+interface RegisterFormData {
+	restaurantname: string;
 	email: string;
 	password: string;
 }
 
+
 export default function RegisterForm() {
-	const [formData, setFormData] = useState<FormData>({
-		username: "",
+	const [formData, setFormData] = useState<RegisterFormData>({
+		restaurantname: "",
 		email: "",
 		password: "",
 	});
+
+	const register = useRegister();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -24,27 +28,7 @@ export default function RegisterForm() {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-
-		try {
-			const response = await fetch("http://127.0.0.1:5000/api/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				console.log("Sukces:", data);
-				// dodaj jakieś skierowanie na inną stronę np. userpage
-			} else {
-				// Obsługa błędów odpowiedzi serwera, np. wyświetlenie komunikatu
-				console.error("Błąd serwera");
-			}
-		} catch (error) {
-			console.error("Błąd:", error);
-		}
+		await register(formData.restaurantname, formData.email, formData.password);
 	};
 
 	return (
@@ -54,15 +38,15 @@ export default function RegisterForm() {
 		>
 			<div>
 				<label
-					htmlFor='username'
+					htmlFor='restaurantname'
 					className='block text-sm font-medium text-gray-700 dark:text-gray-200'
 				>
 					Nazwa Restauracji
 				</label>
 				<input
 					type='text'
-					name='username'
-					value={formData.username}
+					name='restaurantname'
+					value={formData.restaurantname}
 					onChange={handleChange}
 					className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
 				/>

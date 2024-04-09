@@ -1,7 +1,6 @@
 "use client";
-import { useState, FormEvent, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "../api/hooks/useAuthToken";
+import { useState, FormEvent, } from "react";
+import { useLogin } from "../api/login";
 
 interface LoginFormData {
 	email: string;
@@ -14,8 +13,7 @@ export default function LoginForm() {
 		password: "",
 	});
 
-	const { login } = useAuth();
-	const router = useRouter();
+	const login = useLogin();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -27,29 +25,7 @@ export default function LoginForm() {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-
-		try {
-			const response = await fetch("http://127.0.0.1:5000/api/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				console.log("Login successful:", data);
-				localStorage.setItem("token", data.access_token);
-				localStorage.setItem("user_id", data.user_id.toString());
-				router.push("../userpanel");
-				login();
-			} else {
-				console.error("Login failed");
-			}
-		} catch (error) {
-			console.error("Error:", error);
-		}
+		await login(formData.email, formData.password);
 	};
 
 	return (
