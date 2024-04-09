@@ -11,7 +11,7 @@ interface RestaurantData {
 const Menu = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
-	const { isAuthenticated, logout } = useAuth();
+	const { isAuthenticated, logoutAction } = useAuth();
 	const [restaurantName, setRestaurantName] = useState<string>("");
 	const router = useRouter();
 
@@ -56,7 +56,7 @@ const Menu = () => {
 	}, [isAuthenticated]);
 
 	const handleLogout = () => {
-		logout();
+		logoutAction();
 		router.push("/");
 	};
 

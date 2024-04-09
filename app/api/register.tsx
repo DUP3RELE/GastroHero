@@ -17,7 +17,7 @@ export const useRegister = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Rejestracja zakończona sukcesem:", data);
-        router.push("/login");
+        router.push("/pages/userpanel/login");
       } else {
         console.error("Błąd podczas rejestracji");
       }

@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -51,7 +52,7 @@ export default function employeeManagement() {
 			<div className='flex justify-between w-full m-2'>
 				<div className='m-2'>
 					{restaurantName ? (
-						<h1>Witaj, {restaurantName}!</h1>
+						<h1>Witaj, {restaurantName}</h1>
 					) : (
 						<h1>Ładowanie danych użytkownika...</h1>
 					)}
