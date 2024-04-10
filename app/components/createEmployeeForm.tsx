@@ -2,13 +2,18 @@
 import { useState, FormEvent } from "react";
 import createEmployee from "../api/createEmployee";
 import { EmployeeFormData } from "../api/createEmployee";
+import { useRouter } from "next/navigation";
 
 export default function CreateEmployeeForm() {
+	const initialRestaurantId = localStorage.getItem("restaurant_id") || "";
+	const router = useRouter();
+
 	const [formData, setFormData] = useState<EmployeeFormData>({
 		login: "",
 		password: "",
 		name: "",
 		position: "",
+		restaurant_id: initialRestaurantId,
 	});
 
 	const handleChange = (
@@ -27,6 +32,7 @@ export default function CreateEmployeeForm() {
 		try {
 			await createEmployee(formData);
 			console.log("Employee registered successfully");
+			router.push("../");
 		} catch (error) {
 			console.error("Failed to register employee");
 		}

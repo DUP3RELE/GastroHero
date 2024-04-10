@@ -1,4 +1,5 @@
 export interface EmployeeFormData {
+	restaurant_id: string;
 	login: string;
 	password: string;
 	name: string;
