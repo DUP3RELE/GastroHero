@@ -50,6 +50,8 @@ export default function Workers() {
 		fetchEmployees();
 	}, []);
 
+	const visibleEmployees = employees.slice(0, 5);
+
 	return (
 		<div className='w-1/4 m-3 p-3 rounded border shadow-lg dark:shadow-blue-800 shadow-blue-300'>
 			<div className='m-3'>

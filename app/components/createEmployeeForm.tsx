@@ -5,7 +5,9 @@ import { EmployeeFormData } from "../api/createEmployee";
 import { useRouter } from "next/navigation";
 
 export default function CreateEmployeeForm() {
-	const initialRestaurantId = localStorage.getItem("restaurant_id") || "";
+	const initialRestaurantId = parseInt(
+		localStorage.getItem("restaurant_id") || "0"
+	);
 	const router = useRouter();
 
 	const [formData, setFormData] = useState<EmployeeFormData>({
