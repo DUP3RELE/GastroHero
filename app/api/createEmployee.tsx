@@ -8,6 +8,10 @@ export interface EmployeeFormData {
 
 const createEmployee = async (formData: EmployeeFormData) => {
 	const token = localStorage.getItem("token");
+	if (!token) {
+		console.error("No JWT token is stored.");
+	}
+	console.log(JSON.stringify(formData));
 
 	try {
 		const response = await fetch("http://127.0.0.1:5000/api/create_employee", {
