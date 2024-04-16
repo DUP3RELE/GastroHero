@@ -3,11 +3,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GetEmployees } from "@/app/api/getEmployees";
 import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
+import editEmployee from "@/app/api/editEmployee";
+import deleteEmployee from "@/app/api/deleteEmployee";
+import PositionSelect from "@/app/components/positionSelect";
+import { EmployeeFormData } from "@/app/api/createEmployee";
 
 export default function EmployeeManagement() {
 	const token = localStorage.getItem("token");
 	const restaurantId = localStorage.getItem("restaurant_id");
 	const [expandedId, setExpandedId] = useState(null);
+	const [editPosition, setEditPosition] = useState("");
 
 	const { restaurantName } = useRestaurantName(token || "");
 
@@ -25,6 +30,25 @@ export default function EmployeeManagement() {
 			setExpandedId(null);
 		} else {
 			setExpandedId(id);
+		}
+	};
+
+	const handleEdit = async (employeeId: number, newPosition: string) => {
+		try {
+			const updatedData = { position: newPosition };
+			await editEmployee(employeeId, updatedData);
+			fetchEmployees();
+		} catch (error) {
+			console.error("Error editing employee:", error);
+		}
+	};
+
+	const handleDelete = async (employeeId: any) => {
+		try {
+			await deleteEmployee(employeeId);
+			fetchEmployees();
+		} catch (error) {
+			console.error("Error deleting employee:", error);
 		}
 	};
 
@@ -82,10 +106,23 @@ export default function EmployeeManagement() {
 											className='text-sm p-2 mt-2 bg-gray-400 rounded-md'
 											style={{ maxHeight: "33vh", overflowY: "auto" }}
 										>
-											<button className='p-2 text-left border rounded-md m-2'>
-												Zmień pozycję
+											<PositionSelect
+												value={editPosition}
+												onChange={(e) => setEditPosition(e.target.value)}
+											/>
+											<button
+												onClick={() => {
+													handleEdit(employee.id, editPosition);
+													setExpandedId(null);
+												}}
+												className='p-2 text-left border rounded-md m-2'
+											>
+												Zapisz zmiany
 											</button>
-											<button className='p-2 text-left border rounded-md m-2'>
+											<button
+												onClick={() => handleDelete(employee.id)}
+												className='p-2 text-left border rounded-md m-2'
+											>
 												Usuń
 											</button>
 										</div>

@@ -3,6 +3,7 @@ import { useState, FormEvent } from "react";
 import createEmployee from "../api/createEmployee";
 import { EmployeeFormData } from "../api/createEmployee";
 import { useRouter } from "next/navigation";
+import PositionSelect from "./positionSelect";
 
 export default function CreateEmployeeForm() {
 	const initialRestaurantId = parseInt(
@@ -38,6 +39,15 @@ export default function CreateEmployeeForm() {
 		} catch (error) {
 			console.error("Failed to register employee");
 		}
+	};
+
+	const handlePositionChange = (
+		event: React.ChangeEvent<HTMLSelectElement>
+	) => {
+		setFormData({
+			...formData,
+			position: event.target.value,
+		});
 	};
 
 	return (
@@ -90,17 +100,10 @@ export default function CreateEmployeeForm() {
 			>
 				Pozycja
 			</label>
-			<select
-				name='position'
+			<PositionSelect
 				value={formData.position}
-				onChange={handleChange}
-				className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
-			>
-				<option value=''>Wybierz opcję</option>
-				<option value='opcja1'>Opcja 1</option>
-				<option value='opcja2'>Opcja 2</option>
-				<option value='opcja3'>Opcja 3</option>
-			</select>
+				onChange={handlePositionChange}
+			/>
 			<button
 				type='submit'
 				className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-indigo-900 dark:hover:bg-indigo-800 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
