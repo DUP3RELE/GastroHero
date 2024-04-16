@@ -1,51 +1,23 @@
-'use client'
+"use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import { useAuth } from "@/app/api/hooks/useAuthToken";
-import RestaurantProfile from "../page";
-
-interface RestaurantData {
-	restaurantname: string;
-}
+import { useEffect } from "react";
+import { GetEmployees } from "@/app/api/getEmployees";
+import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
 
 export default function employeeManagement() {
-	const [restaurantName, setRestaurantName] = useState<string>("");
-	const { isAuthenticated, logout } = useAuth();
-	const router = useRouter();
+	const token = localStorage.getItem("token");
+	const restaurantId = localStorage.getItem("restaurant_id");
+	const { employees, fetchEmployees, error } = GetEmployees(
+		token!,
+		parseInt(restaurantId!)
+	);
+	const { restaurantName } = token
+		? useRestaurantName(token)
+		: { restaurantName: "" };
+
 	useEffect(() => {
-		const fetchRestaurantName = async () => {
-			const token = localStorage.getItem("token");
-			if (!token) {
-				console.error("Brak tokenu, użytkownik niezalogowany");
-				return;
-			}
-
-			try {
-				const response = await fetch("http://127.0.0.1:5000/api/protected", {
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-
-				if (response.ok) {
-					const data: RestaurantData = await response.json();
-					setRestaurantName(data.restaurantname);
-				} else {
-					throw new Error("Nie udało się pobrać danych");
-				}
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		const token = localStorage.getItem("token");
-		if (token) {
-			fetchRestaurantName();
-		} else {
-			setRestaurantName("");
-		}
-	}, [isAuthenticated]);
+		fetchEmployees();
+	}, [fetchEmployees]);
 
 	return (
 		<>
@@ -71,6 +43,19 @@ export default function employeeManagement() {
 						Edytuj pozycje
 					</Link>
 				</div>
+			</div>
+			<div className='m-3'>
+				<p>Pracownicy</p>
+				{error && <p className='text-red-500'>{error}</p>}
+			</div>
+			<div className='m-2'>
+				<ul>
+					{employees.map((employee) => (
+						<li key={employee.id}>
+							{employee.name} - {employee.position}
+						</li>
+					))}
+				</ul>
 			</div>
 		</>
 	);

@@ -1,5 +1,11 @@
-'use client'
-import React, { createContext, useContext, useState, ReactNode } from "react";
+"use client";
+import React, {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useEffect,
+} from "react";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
@@ -18,8 +24,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		localStorage.removeItem("token");
 	};
 
+	useEffect(() => {
+		const syncLoginState = () => {
+			const token = localStorage.getItem("token");
+			setIsAuthenticated(!!token);
+		};
+
+		window.addEventListener("storage", syncLoginState);
+
+		return () => window.removeEventListener("storage", syncLoginState);
+	}, []);
+
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, loginAction, logoutAction }}>
+		<AuthContext.Provider
+			value={{ isAuthenticated, loginAction, logoutAction }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);

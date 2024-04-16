@@ -1,48 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Workers from "@/app/components/datablocks/workers";
 import MealData from "@/app/components/datablocks/restaurantData";
 import { useRouter } from "next/navigation";
+import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
+import { useAuth } from "@/app/api/hooks/useAuthToken";
 
 interface RestaurantData {
 	restaurantname: string;
 }
 
 export default function RestaurantProfile() {
-	const [restaurantName, setRestaurantName] = useState<string>("");
+	const { isAuthenticated } = useAuth();
 	const router = useRouter();
+	const token = localStorage.getItem("token");
 
 	useEffect(() => {
-		const fetchRestaurantData = async () => {
-			const token = localStorage.getItem("token");
-			if (!token) {
-				console.error("Brak tokenu, użytkownik niezalogowany");
-				router.push("/login");
-				return;
-			}
+		if (!isAuthenticated && !token) {
+			router.push("/userpanel/login");
+		}
+	}, [isAuthenticated, token, router]);
 
-			try {
-				const response = await fetch("http://127.0.0.1:5000/api/protected", {
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-
-				if (response.ok) {
-					const data: RestaurantData = await response.json();
-					setRestaurantName(data.restaurantname);
-				} else {
-					throw new Error("Nie udało się pobrać danych restauracji");
-				}
-			} catch (error) {
-				console.error(error);
-				router.push("/login");
-			}
-		};
-		fetchRestaurantData();
-	}, [router]);
+	const { restaurantName } = token
+		? useRestaurantName(token)
+		: { restaurantName: "" };
 
 	return (
 		<div className='m-2'>

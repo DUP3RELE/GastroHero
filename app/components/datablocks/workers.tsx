@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { GetEmployees } from "@/app/api/getEmployees";
 
 export default function Workers() {
-	const token = localStorage.getItem("token");
-	const restaurantId = localStorage.getItem("restaurant_id");
-	const { employees, fetchEmployees, error } = GetEmployees(
-		token!,
-		parseInt(restaurantId!)
-	);
+		const token = localStorage.getItem("token");
+		const restaurantId = localStorage.getItem("restaurant_id");
+		const { employees, fetchEmployees, error } = GetEmployees(
+			token!,
+			parseInt(restaurantId!)
+		);
 
 	useEffect(() => {
 		fetchEmployees();
