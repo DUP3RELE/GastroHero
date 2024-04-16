@@ -16,15 +16,13 @@ export default function RestaurantProfile() {
 	const router = useRouter();
 	const token = localStorage.getItem("token");
 
+	const { restaurantName } = useRestaurantName(token || "");
+
 	useEffect(() => {
 		if (!isAuthenticated && !token) {
 			router.push("/userpanel/login");
 		}
 	}, [isAuthenticated, token, router]);
-
-	const { restaurantName } = token
-		? useRestaurantName(token)
-		: { restaurantName: "" };
 
 	return (
 		<div className='m-2'>
