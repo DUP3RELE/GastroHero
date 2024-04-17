@@ -7,6 +7,7 @@ import editEmployee from "@/app/api/editEmployee";
 import deleteEmployee from "@/app/api/deleteEmployee";
 import PositionSelect from "@/app/components/positionSelect";
 import { EmployeeFormData } from "@/app/api/createEmployee";
+import { stringify } from "querystring";
 
 export default function EmployeeManagement() {
 	const token = localStorage.getItem("token");
@@ -35,7 +36,7 @@ export default function EmployeeManagement() {
 
 	const handleEdit = async (employeeId: number, newPosition: string) => {
 		try {
-			const updatedData = { position: newPosition };
+			const updatedData = { position: newPosition, type: stringify };
 			await editEmployee(employeeId, updatedData);
 			fetchEmployees();
 		} catch (error) {
