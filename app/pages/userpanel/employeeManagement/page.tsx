@@ -6,8 +6,14 @@ import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
 import editEmployee from "@/app/api/editEmployee";
 import deleteEmployee from "@/app/api/deleteEmployee";
 import PositionSelect from "@/app/components/positionSelect";
-import { EmployeeFormData } from "@/app/api/createEmployee";
-import { stringify } from "querystring";
+
+interface EmployeeFormData {
+	restaurant_id: number;
+	login: string;
+	password: string;
+	name: string;
+	position: string;
+}
 
 export default function EmployeeManagement() {
 	const token = localStorage.getItem("token");
@@ -36,7 +42,7 @@ export default function EmployeeManagement() {
 
 	const handleEdit = async (employeeId: number, newPosition: string) => {
 		try {
-			const updatedData = { position: newPosition, type: stringify };
+			const updatedData = { position: newPosition };
 			await editEmployee(employeeId, updatedData);
 			fetchEmployees();
 		} catch (error) {
