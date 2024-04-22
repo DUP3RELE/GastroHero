@@ -78,7 +78,7 @@ export default function EmployeeManagement() {
 							Zarejestruj pracownika
 						</Link>
 						<Link
-							href={""}
+							href={"./employeeManagement/editPositions"}
 							className='m-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-indigo-900 dark:hover:bg-indigo-800 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
 						>
 							Edytuj pozycje
