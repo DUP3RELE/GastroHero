@@ -4,6 +4,7 @@ import {
 	createPosition,
 	updatePosition,
 	deletePosition,
+	getPositions,
 } from "@/app/api/employees/createPosition";
 import Modal from "@/app/components/modal";
 
@@ -13,52 +14,36 @@ interface Position {
 	access: string;
 }
 
-export default function PositionEditor({
+const PositionEditor: React.FC<{ restaurantId: number }> = ({
 	restaurantId,
-}: {
-	restaurantId: number;
-}) {
+}) => {
 	const [positions, setPositions] = useState<Position[]>([]);
 	const [expandedId, setExpandedId] = useState<number | null>(null);
 	const [isAdding, setIsAdding] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 
 	const [newPositionName, setNewPositionName] = useState("");
 	const [newPositionAccess, setNewPositionAccess] = useState<string[]>([]);
 
 	const fetchPositions = async () => {
 		try {
-			const token = localStorage.getItem("token");
-			if (!token) {
-				console.error("No JWT token is stored.");
-				return;
-			}
-
-			const response = await fetch(
-				`/api/positions?restaurant_id=${restaurantId}`,
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-
-			if (!response.ok) {
-				throw new Error("Failed to fetch positions");
-			}
-
-			const data = await response.json();
-			setPositions(data);
+			const positions = await getPositions(restaurantId); // Fetch positions
+			setPositions(positions);
+			setLoading(false); // Stop loading once data is retrieved
 		} catch (error) {
 			console.error("Error fetching positions:", error);
+			setError("Failed to fetch positions.");
+			setLoading(false); // Stop loading on error
 		}
 	};
 
 	useEffect(() => {
-		fetchPositions(); // Fetch initial positions
-	}, [restaurantId]);
+		fetchPositions(); // Fetch positions on component mount
+	}, [restaurantId]); // Ensure the correct dependency array
 
 	const handleToggleExpand = (positionId: number) => {
-		setExpandedId(expandedId === positionId ? null : positionId);
+		setExpandedId(expandedId === positionId ? null : positionId); // Toggle expand/collapse
 	};
 
 	const handleAddPosition = async () => {
@@ -68,11 +53,11 @@ export default function PositionEditor({
 				position: newPositionName,
 				access: newPositionAccess.join(","),
 			});
-			console.log("Data sent to server for adding position:", createPosition);
-			setIsAdding(false);
-			fetchPositions();
+			setIsAdding(false); // Close modal
+			fetchPositions(); // Refresh after adding
 		} catch (error) {
 			console.error("Error creating position:", error);
+			setError("Failed to create position.");
 		}
 	};
 
@@ -86,92 +71,108 @@ export default function PositionEditor({
 				{ restaurantId, position: newName, access: newAccess.join(",") },
 				positionId
 			);
-			fetchPositions();
+			fetchPositions(); // Refresh after updating
 		} catch (error) {
 			console.error("Error updating position:", error);
+			setError("Failed to update position.");
 		}
 	};
 
 	return (
 		<div>
 			<button
-				onClick={() => setIsAdding(true)}
+				onClick={() => setIsAdding(true)} // Open the modal to add a new position
 				className='bg-blue-500 text-white px-4 py-2 rounded'
 			>
 				Dodaj pozycję
 			</button>
 
-			{positions.length === 0 ? (
-				<p>
-					Brak pozycji. Dodaj nową pozycję, korzystając z przycisku powyżej.
-				</p>
+			{loading ? ( // Display loading message if still fetching
+				<p>Loading positions...</p>
 			) : (
-				positions.map((position) => (
-					<div
-						key={position.id}
-						className='border p-4 rounded mb-2'
-					>
-						<div className='flex justify-between'>
-							<span>{position.position}</span>
+				<>
+					{positions.length === 0 ? (
+						<p>
+							Brak pozycji. Dodaj nową, korzystając z przycisku powyżej.
 							<button
-								onClick={() => handleToggleExpand(position.id)}
-								className='bg-gray-300 px-2 py-1 rounded'
+								onClick={() => setIsAdding(true)}
+								className='underline text-blue-500'
 							>
-								{expandedId === position.id ? "Schowaj" : "Edytuj"}
+								Dodaj pozycję
 							</button>
-						</div>
+						</p>
+					) : (
+						positions.map((position) => (
+							<div
+								key={position.id}
+								className='border p-4 rounded mb-2'
+							>
+								<div className='flex justify-between'>
+									<span>{position.position}</span>
+									<button
+										onClick={() => handleToggleExpand(position.id)}
+										className='bg-gray-300 px-2 py-1 rounded'
+									>
+										{expandedId === position.id ? "Schowaj" : "Edytuj"}
+									</button>
+								</div>
 
-						{expandedId === position.id && (
-							<div className='bg-gray-200 p-2 rounded'>
-								<div>
-									<label htmlFor={`position-${position.id}-name`}>Nazwa:</label>
-									<input
-										type='text'
-										id={`position-${position.id}-name`}
-										value={position.position}
-										onChange={(e) =>
-											handleEditPosition(
-												position.id,
-												e.target.value,
-												position.access.split(",")
-											)
-										}
-										className='border p-2 rounded'
-									/>
-								</div>
-								<div>
-									<label htmlFor={`position-${position.id}-access`}>
-										Dostępy:
-									</label>
-									<div>
-										{["Dostęp 1", "Dostęp 2", "Dostęp 3", "Dostęp 4"].map(
-											(accessItem, idx) => (
-												<div key={idx}>
-													<input
-														type='checkbox'
-														value={accessItem}
-														checked={newPositionAccess.includes(accessItem)}
-														onChange={(e) => {
-															setNewPositionAccess((prev) =>
-																e.target.checked
-																	? [...prev, accessItem]
-																	: prev.filter((a) => a !== accessItem)
-															);
-														}}
-													/>
-													<label>{accessItem}</label>
-												</div>
-											)
-										)}
+								{expandedId === position.id && (
+									<div className='bg-gray-200 p-2 rounded'>
+										<div>
+											<label htmlFor={`position-${position.id}-name`}>
+												Nazwa:
+											</label>
+											<input
+												type='text'
+												id={`position-${position.id}-name`}
+												value={position.position}
+												onChange={(e) =>
+													handleEditPosition(
+														position.id,
+														e.target.value,
+														position.access.split(",")
+													)
+												}
+												className='border p-2 rounded'
+											/>
+										</div>
+										<div>
+											<label htmlFor={`position-${position.id}-access`}>
+												Dostępy:
+											</label>
+											<div>
+												{["Dostęp 1", "Dostęp 2", "Dostęp 3", "Dostęp 4"].map(
+													(accessItem, idx) => (
+														<div key={idx}>
+															<input
+																type='checkbox'
+																value={accessItem}
+																checked={newPositionAccess.includes(accessItem)}
+																onChange={(e) => {
+																	const updatedAccess = e.target.checked
+																		? [...newPositionAccess, accessItem]
+																		: newPositionAccess.filter(
+																				(a) => a !== accessItem
+																		  );
+																	setNewPositionAccess(updatedAccess); // Update state
+																}}
+															/>
+															<label>{accessItem}</label>
+														</div>
+													)
+												)}
+											</div>
+										</div>
 									</div>
-								</div>
+								)}
 							</div>
-						)}
-					</div>
-				))
+						))
+					)}
+				</>
 			)}
 
-			{isAdding && (
+			{isAdding && ( // Show modal to add a new position
 				<Modal onClose={() => setIsAdding(false)}>
 					<h2>Dodaj pozycję</h2>
 					<div>
@@ -194,10 +195,10 @@ export default function PositionEditor({
 										value={accessItem}
 										checked={newPositionAccess.includes(accessItem)}
 										onChange={(e) => {
-											setNewPositionAccess((prev) =>
+											setNewPositionAccess(
 												e.target.checked
-													? [...prev, accessItem]
-													: prev.filter((a) => a !== accessItem)
+													? [...newPositionAccess, accessItem]
+													: newPositionAccess.filter((a) => a !== accessItem)
 											);
 										}}
 									/>
@@ -222,4 +223,6 @@ export default function PositionEditor({
 			)}
 		</div>
 	);
-}
+};
+
+export default PositionEditor;
