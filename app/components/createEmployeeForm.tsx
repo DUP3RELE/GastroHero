@@ -1,7 +1,7 @@
 "use client";
 import { useState, FormEvent } from "react";
-import createEmployee from "../api/createEmployee";
-import { EmployeeFormData } from "../api/createEmployee";
+import createEmployee from "../api/employees/createEmployee";
+import { EmployeeFormData } from "../api/employees/createEmployee";
 import { useRouter } from "next/navigation";
 import PositionSelect from "./positionSelect";
 

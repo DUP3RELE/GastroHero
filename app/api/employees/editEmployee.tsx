@@ -1,9 +1,15 @@
-import { EmployeeFormData } from "./createEmployee";
+interface EmployeePositionData {
+	position: string;
+}
 
-const editEmployee = async (employeeId: number, formData: EmployeeFormData) => {
+const editEmployee = async (
+	employeeId: number,
+	formData: EmployeePositionData
+) => {
 	const token = localStorage.getItem("token");
 	if (!token) {
 		console.error("No JWT token is stored.");
+		return;
 	}
 
 	try {
@@ -25,7 +31,7 @@ const editEmployee = async (employeeId: number, formData: EmployeeFormData) => {
 
 		return await response.json();
 	} catch (error) {
-		console.error("Error:", error);
+		console.error("Error editing employee:", error);
 		throw error;
 	}
 };

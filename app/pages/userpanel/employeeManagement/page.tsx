@@ -1,17 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GetEmployees } from "@/app/api/getEmployees";
+import { GetEmployees } from "@/app/api/employees/getEmployees";
 import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
-import editEmployee from "@/app/api/editEmployee";
-import deleteEmployee from "@/app/api/deleteEmployee";
+import editEmployee from "@/app/api/employees/editEmployee";
+import deleteEmployee from "@/app/api/employees/deleteEmployee";
 import PositionSelect from "@/app/components/positionSelect";
 
-interface EmployeeFormData {
-	restaurant_id: number;
-	login: string;
-	password: string;
-	name: string;
+interface EmployeePositionData {
 	position: string;
 }
 
@@ -42,7 +38,10 @@ export default function EmployeeManagement() {
 
 	const handleEdit = async (employeeId: number, newPosition: string) => {
 		try {
-			const updatedData = { position: newPosition };
+			const updatedData: EmployeePositionData = {
+				position: newPosition,
+			};
+
 			await editEmployee(employeeId, updatedData);
 			fetchEmployees();
 		} catch (error) {
