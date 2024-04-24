@@ -1,4 +1,3 @@
-// app/api/register.tsx
 import { useRouter } from "next/navigation";
 
 export const useRegister = () => {

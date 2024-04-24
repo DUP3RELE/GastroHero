@@ -28,22 +28,22 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 
 	const fetchPositions = async () => {
 		try {
-			const positions = await getPositions(restaurantId); // Fetch positions
+			const positions = await getPositions(restaurantId);
 			setPositions(positions);
-			setLoading(false); // Stop loading once data is retrieved
+			setLoading(false);
 		} catch (error) {
 			console.error("Error fetching positions:", error);
 			setError("Failed to fetch positions.");
-			setLoading(false); // Stop loading on error
+			setLoading(false);
 		}
 	};
 
 	useEffect(() => {
-		fetchPositions(); // Fetch positions on component mount
-	}, [restaurantId]); // Ensure the correct dependency array
+		fetchPositions();
+	}, [restaurantId]);
 
 	const handleToggleExpand = (positionId: number) => {
-		setExpandedId(expandedId === positionId ? null : positionId); // Toggle expand/collapse
+		setExpandedId(expandedId === positionId ? null : positionId);
 	};
 
 	const handleAddPosition = async () => {
@@ -53,8 +53,8 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 				position: newPositionName,
 				access: newPositionAccess.join(","),
 			});
-			setIsAdding(false); // Close modal
-			fetchPositions(); // Refresh after adding
+			setIsAdding(false);
+			fetchPositions();
 		} catch (error) {
 			console.error("Error creating position:", error);
 			setError("Failed to create position.");
@@ -71,7 +71,7 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 				{ restaurantId, position: newName, access: newAccess.join(",") },
 				positionId
 			);
-			fetchPositions(); // Refresh after updating
+			fetchPositions();
 		} catch (error) {
 			console.error("Error updating position:", error);
 			setError("Failed to update position.");
@@ -81,13 +81,13 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 	return (
 		<div>
 			<button
-				onClick={() => setIsAdding(true)} // Open the modal to add a new position
+				onClick={() => setIsAdding(true)}
 				className='bg-blue-500 text-white px-4 py-2 rounded'
 			>
 				Dodaj pozycję
 			</button>
 
-			{loading ? ( // Display loading message if still fetching
+			{loading ? (
 				<p>Loading positions...</p>
 			) : (
 				<>
@@ -155,7 +155,7 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 																		: newPositionAccess.filter(
 																				(a) => a !== accessItem
 																		  );
-																	setNewPositionAccess(updatedAccess); // Update state
+																	setNewPositionAccess(updatedAccess);
 																}}
 															/>
 															<label>{accessItem}</label>
@@ -172,7 +172,7 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 				</>
 			)}
 
-			{isAdding && ( // Show modal to add a new position
+			{isAdding && (
 				<Modal onClose={() => setIsAdding(false)}>
 					<h2>Dodaj pozycję</h2>
 					<div>
