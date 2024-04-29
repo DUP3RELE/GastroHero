@@ -1,179 +1,166 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
+	getPositions,
 	createPosition,
 	updatePosition,
 	deletePosition,
-	getPositions,
+	EmployeePositionData,
 } from "@/app/api/employees/createPosition";
 import Modal from "@/app/components/modal";
-
 interface Position {
 	id: number;
 	position: string;
 	access: string;
 }
 
-const PositionEditor: React.FC<{ restaurantId: number }> = ({
-	restaurantId,
-}) => {
+export default function PositionManagement() {
 	const [positions, setPositions] = useState<Position[]>([]);
-	const [expandedId, setExpandedId] = useState<number | null>(null);
-	const [isAdding, setIsAdding] = useState(false);
-	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-
+	const [expandedId, setExpandedId] = useState<number | null>(null);
+	const [newPosition, setNewPosition] = useState("");
+	const [newAccess, setNewAccess] = useState<string[]>([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [newPositionName, setNewPositionName] = useState("");
 	const [newPositionAccess, setNewPositionAccess] = useState<string[]>([]);
 
-	const fetchPositions = async () => {
-		try {
-			const positions = await getPositions(restaurantId);
-			setPositions(positions);
-			setLoading(false);
-		} catch (error) {
-			console.error("Error fetching positions:", error);
-			setError("Failed to fetch positions.");
-			setLoading(false);
-		}
-	};
+	const token = localStorage.getItem("token");
+	const restaurant_id = Number(localStorage.getItem("restaurant_id"));
 
 	useEffect(() => {
 		fetchPositions();
-	}, [restaurantId]);
+	}, []);
 
-	const handleToggleExpand = (positionId: number) => {
-		setExpandedId(expandedId === positionId ? null : positionId);
+	const fetchPositions = async () => {
+		try {
+			const fetchedPositions = await getPositions(restaurant_id);
+			setPositions(fetchedPositions);
+		} catch (error: any) {
+			setError(error.message);
+		}
+	};
+
+	const handleUpdate = async (positionId: number) => {
+		try {
+			await updatePosition(
+				{ restaurant_id, position: newPosition, access: newAccess.join(",") },
+				positionId
+			);
+			fetchPositions();
+			setExpandedId(null);
+		} catch (error: any) {
+			setError(error.message);
+		}
+	};
+
+	const handleDelete = async (positionId: number) => {
+		try {
+			await deletePosition(positionId);
+			fetchPositions();
+		} catch (error: any) {
+			setError(error.message);
+		}
 	};
 
 	const handleAddPosition = async () => {
 		try {
 			await createPosition({
-				restaurantId,
+				restaurant_id,
 				position: newPositionName,
 				access: newPositionAccess.join(","),
 			});
-			setIsAdding(false);
 			fetchPositions();
-		} catch (error) {
-			console.error("Error creating position:", error);
-			setError("Failed to create position.");
-		}
-	};
-
-	const handleEditPosition = async (
-		positionId: number,
-		newName: string,
-		newAccess: string[]
-	) => {
-		try {
-			await updatePosition(
-				{ restaurantId, position: newName, access: newAccess.join(",") },
-				positionId
-			);
-			fetchPositions();
-		} catch (error) {
-			console.error("Error updating position:", error);
-			setError("Failed to update position.");
+			setIsModalOpen(false);
+			setNewPositionName("");
+			setNewPositionAccess([]);
+		} catch (error: any) {
+			setError(error.message);
 		}
 	};
 
 	return (
-		<div>
+		<div className='w-full p-4'>
+			<h1 className='text-xl font-bold mb-4'>Zarządaj pozycjami</h1>
 			<button
-				onClick={() => setIsAdding(true)}
-				className='bg-blue-500 text-white px-4 py-2 rounded'
+				className='mb-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none'
+				onClick={() => setIsModalOpen(true)}
 			>
-				Dodaj pozycję
+				Stwórz nową pozycję
 			</button>
-
-			{loading ? (
-				<p>Loading positions...</p>
-			) : (
-				<>
-					{positions.length === 0 ? (
-						<p>
-							Brak pozycji. Dodaj nową, korzystając z przycisku powyżej.
-							<button
-								onClick={() => setIsAdding(true)}
-								className='underline text-blue-500'
-							>
-								Dodaj pozycję
-							</button>
-						</p>
-					) : (
-						positions.map((position) => (
-							<div
-								key={position.id}
-								className='border p-4 rounded mb-2'
-							>
-								<div className='flex justify-between'>
-									<span>{position.position}</span>
-									<button
-										onClick={() => handleToggleExpand(position.id)}
-										className='bg-gray-300 px-2 py-1 rounded'
-									>
-										{expandedId === position.id ? "Schowaj" : "Edytuj"}
-									</button>
-								</div>
-
-								{expandedId === position.id && (
-									<div className='bg-gray-200 p-2 rounded'>
-										<div>
-											<label htmlFor={`position-${position.id}-name`}>
-												Nazwa:
-											</label>
-											<input
-												type='text'
-												id={`position-${position.id}-name`}
-												value={position.position}
-												onChange={(e) =>
-													handleEditPosition(
-														position.id,
-														e.target.value,
-														position.access.split(",")
-													)
-												}
-												className='border p-2 rounded'
-											/>
-										</div>
-										<div>
-											<label htmlFor={`position-${position.id}-access`}>
-												Dostępy:
-											</label>
-											<div>
-												{["Dostęp 1", "Dostęp 2", "Dostęp 3", "Dostęp 4"].map(
-													(accessItem, idx) => (
-														<div key={idx}>
-															<input
-																type='checkbox'
-																value={accessItem}
-																checked={newPositionAccess.includes(accessItem)}
-																onChange={(e) => {
-																	const updatedAccess = e.target.checked
-																		? [...newPositionAccess, accessItem]
-																		: newPositionAccess.filter(
-																				(a) => a !== accessItem
-																		  );
-																	setNewPositionAccess(updatedAccess);
-																}}
-															/>
-															<label>{accessItem}</label>
-														</div>
-													)
-												)}
-											</div>
-										</div>
-									</div>
-								)}
+			{positions.map((position) => (
+				<div
+					key={position.id}
+					className='border rounded-md p-4 my-2 bg-blue-700'
+				>
+					<div className='flex justify-between'>
+						<span>
+							{position.position} - Dostęp: {position.access}
+						</span>
+						<button
+							className='py-1 px-3 border rounded-md bg-gray-300 hover:bg-gray-400'
+							onClick={() =>
+								setExpandedId(expandedId === position.id ? null : position.id)
+							}
+						>
+							Edytuj
+						</button>
+					</div>
+					{expandedId === position.id && (
+						<div className='bg-gray-500 p-2 rounded mt-2 text-black'>
+							<div>
+								<label>
+									Position:
+									<input
+										type='text'
+										value={newPosition}
+										onChange={(e) => setNewPosition(e.target.value)}
+										className='ml-2 border p-1 rounded'
+									/>
+								</label>
 							</div>
-						))
+							<div>
+								<label>Dostęp:</label>
+								<div>
+									{["Dostęp 1", "Dostęp 2", "Dostęp 3", "Dostęp 4"].map(
+										(accessItem, idx) => (
+											<div key={idx}>
+												<input
+													type='checkbox'
+													value={accessItem}
+													checked={newAccess.includes(accessItem)}
+													onChange={(e) => {
+														const updatedAccess = e.target.checked
+															? [...newAccess, accessItem]
+															: newAccess.filter((a) => a !== accessItem);
+														setNewAccess(updatedAccess);
+													}}
+												/>
+												{accessItem}
+											</div>
+										)
+									)}
+								</div>
+							</div>
+							<button
+								className='mt-2 py-1 px-3 border rounded-md bg-blue-500 hover:bg-blue-600 text-white'
+								onClick={() => handleUpdate(position.id)}
+							>
+								Zapisz zmiany
+							</button>
+							<button
+								className='mt-2 py-1 px-3 border rounded-md bg-red-500 hover:bg-red-600 text-white'
+								onClick={() => handleDelete(position.id)}
+							>
+								Usuń pozycję
+							</button>
+						</div>
 					)}
-				</>
-			)}
+				</div>
+			))}
 
-			{isAdding && (
-				<Modal onClose={() => setIsAdding(false)}>
+			{isModalOpen && (
+				<Modal onClose={() => setIsModalOpen(false)}>
 					<h2>Dodaj pozycję</h2>
 					<div>
 						<label htmlFor='new-position-name'>Nazwa pozycji:</label>
@@ -195,11 +182,10 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 										value={accessItem}
 										checked={newPositionAccess.includes(accessItem)}
 										onChange={(e) => {
-											setNewPositionAccess(
-												e.target.checked
-													? [...newPositionAccess, accessItem]
-													: newPositionAccess.filter((a) => a !== accessItem)
-											);
+											const updatedAccess = e.target.checked
+												? [...newPositionAccess, accessItem]
+												: newPositionAccess.filter((a) => a !== accessItem);
+											setNewPositionAccess(updatedAccess);
 										}}
 									/>
 									<label>{accessItem}</label>
@@ -214,7 +200,7 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 						Dodaj
 					</button>
 					<button
-						onClick={() => setIsAdding(false)}
+						onClick={() => setIsModalOpen(false)}
 						className='bg-red-500 text-white px-4 py-2 rounded'
 					>
 						Anuluj
@@ -223,6 +209,4 @@ const PositionEditor: React.FC<{ restaurantId: number }> = ({
 			)}
 		</div>
 	);
-};
-
-export default PositionEditor;
+}

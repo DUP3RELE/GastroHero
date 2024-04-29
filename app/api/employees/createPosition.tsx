@@ -1,10 +1,10 @@
 export interface EmployeePositionData {
-	restaurantId: number;
+	restaurant_id: number;
 	position: string;
 	access: string;
 }
 
-export const getPositions = async (restaurantId: number) => {
+export const getPositions = async (restaurant_id: number) => {
 	try {
 		const token = localStorage.getItem("token");
 		if (!token) {
@@ -13,7 +13,7 @@ export const getPositions = async (restaurantId: number) => {
 		}
 
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/positions?restaurant_id=${restaurantId}`,
+			`http://127.0.0.1:5000/api/positions?restaurant_id=${restaurant_id}`,
 			{
 				method: "GET",
 				headers: {

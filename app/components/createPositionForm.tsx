@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createPosition } from "../api/employees/createPosition";
 
 type EmployeePositionData = {
-	restaurantId: number;
+	restaurant_id: number;
 	position: string;
 	access: string;
 };
@@ -19,7 +19,7 @@ const CreatePositionForm = () => {
 		const restaurantIdNum = parseInt(restaurantId, 10);
 
 		const positionData: EmployeePositionData = {
-			restaurantId: restaurantIdNum,
+			restaurant_id: restaurantIdNum,
 			position,
 			access,
 		};
