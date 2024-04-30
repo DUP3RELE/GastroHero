@@ -98,7 +98,7 @@ export default function PositionManagement() {
 							{position.position} - Dostęp: {position.access}
 						</span>
 						<button
-							className='py-1 px-3 border rounded-md bg-gray-300 hover:bg-gray-400'
+							className='py-1 px-3 border rounded-md bg-blue-500 hover:bg-blue-400'
 							onClick={() =>
 								setExpandedId(expandedId === position.id ? null : position.id)
 							}
@@ -107,7 +107,7 @@ export default function PositionManagement() {
 						</button>
 					</div>
 					{expandedId === position.id && (
-						<div className='bg-gray-500 p-2 rounded mt-2 text-black'>
+						<div className='bg-white p-2 rounded mt-2 text-black'>
 							<div>
 								<label>
 									Position:
@@ -115,7 +115,7 @@ export default function PositionManagement() {
 										type='text'
 										value={newPosition}
 										onChange={(e) => setNewPosition(e.target.value)}
-										className='ml-2 border p-1 rounded'
+										className='ml-2 border-2 border-gray-400 p-1 rounded'
 									/>
 								</label>
 							</div>
@@ -143,13 +143,13 @@ export default function PositionManagement() {
 								</div>
 							</div>
 							<button
-								className='mt-2 py-1 px-3 border rounded-md bg-blue-500 hover:bg-blue-600 text-white'
+								className='mt-2 ml-2 py-1 px-3 border rounded-md bg-blue-500 hover:bg-blue-600 text-white'
 								onClick={() => handleUpdate(position.id)}
 							>
 								Zapisz zmiany
 							</button>
 							<button
-								className='mt-2 py-1 px-3 border rounded-md bg-red-500 hover:bg-red-600 text-white'
+								className='mt-2 ml-2 py-1 px-3 border rounded-md bg-red-500 hover:bg-red-600 text-white'
 								onClick={() => handleDelete(position.id)}
 							>
 								Usuń pozycję

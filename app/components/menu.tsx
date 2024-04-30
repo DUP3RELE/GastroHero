@@ -197,6 +197,60 @@ const Menu = () => {
 							</div>
 						</Link>
 					</div>
+					<div className='px-2 pt-2 pb-3 space-y-1'>
+						<Link
+							href='/docs'
+							passHref
+						>
+							<div className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'>
+								Dokumentacja
+							</div>
+						</Link>
+					</div>
+					{!restaurantName && (
+						<>
+							<div className='px-2 pt-2 pb-3 space-y-1'>
+								<Link href='/pages/userpanel/register'>
+									<button
+										className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'
+										aria-current='page'
+									>
+										Zarejestruj się
+									</button>
+								</Link>
+							</div>
+							<div className='px-2 pt-2 pb-3 space-y-1'>
+								<Link href='/pages/userpanel/login'>
+									<button
+										className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'
+										aria-current='page'
+									>
+										Zaloguj się
+									</button>
+								</Link>
+							</div>
+						</>
+					)}
+					{restaurantName && (
+						<div className='relative group px-2 pt-2 pb-3 space-y-1 '>
+							<button className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'>
+								{restaurantName}
+							</button>
+							<div className='absolute flex-col bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity'>
+								<Link href='/pages/userpanel'>
+									<button className='bg-gray-900 m-2 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'>
+										Panel użytkownika
+									</button>
+								</Link>
+								<button
+									onClick={handleLogout}
+									className='bg-red-600 m-2 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'
+								>
+									Wyloguj Się
+								</button>
+							</div>
+						</div>
+					)}
 				</div>
 			)}
 		</nav>
