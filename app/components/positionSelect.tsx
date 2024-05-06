@@ -24,8 +24,6 @@ const PositionSelect: React.FC<PositionSelectProps> = ({ value, onChange }) => {
 			return;
 		}
 
-		console.log("Restaurant ID:", restaurantId);
-
 		const fetchPositions = async () => {
 			try {
 				const positions = await getPositions(parseInt(restaurantId));

@@ -77,7 +77,7 @@ export default function PositionManagement() {
 		} catch (error: any) {
 			setError(error.message);
 		}
-	};
+	};console.log(object);
 
 	return (
 		<div className='w-full p-4'>
