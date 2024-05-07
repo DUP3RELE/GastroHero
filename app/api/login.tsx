@@ -25,13 +25,15 @@ export const useLogin = () => {
 				console.log("Login successful:", data);
 				localStorage.setItem("token", data.access_token);
 				localStorage.setItem("restaurant_id", data.restaurant_id.toString());
-                loginAction()
+				loginAction();
 				router.push("../userpanel");
 			} else {
-				console.error("Login failed");
+				const errorData = await response.json();
+				throw new Error(errorData.message || "Nieznany błąd logowania.");
 			}
 		} catch (error) {
 			console.error("Error:", error);
+			throw error;
 		}
 	};
 
