@@ -1,12 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
 	getPositions,
 	createPosition,
 	updatePosition,
 	deletePosition,
-	EmployeePositionData,
 } from "@/app/api/employees/createPosition";
 import Modal from "@/app/components/modal";
 interface Position {
@@ -25,8 +23,15 @@ export default function PositionManagement() {
 	const [newPositionName, setNewPositionName] = useState("");
 	const [newPositionAccess, setNewPositionAccess] = useState<string[]>([]);
 
-	const token = localStorage.getItem("token");
-	const restaurant_id = Number(localStorage.getItem("restaurant_id"));
+	const token =
+		typeof window !== "undefined"
+			? window.localStorage.getItem("token")
+			: false;
+	const restaurant_id = Number(
+		typeof window !== "undefined"
+			? window.localStorage.getItem("restaurant_id")
+			: false
+	);
 
 	useEffect(() => {
 		fetchPositions();
@@ -77,7 +82,7 @@ export default function PositionManagement() {
 		} catch (error: any) {
 			setError(error.message);
 		}
-	};console.log(object);
+	};
 
 	return (
 		<div className='w-full p-4'>
