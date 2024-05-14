@@ -14,7 +14,10 @@ interface RestaurantData {
 export default function RestaurantProfile() {
 	const { isAuthenticated } = useAuth();
 	const router = useRouter();
-	const token = localStorage.getItem("token");
+	const token =
+		typeof window !== "undefined"
+			? window.localStorage.getItem("token")
+			: false;
 
 	const { restaurantName } = useRestaurantName(token || "");
 

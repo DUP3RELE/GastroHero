@@ -73,10 +73,10 @@ const PositionSelect: React.FC<PositionSelectProps> = ({ value, onChange }) => {
 			{error ? (
 				<p>{error}</p>
 			) : positions.length === 0 ? (
-				<p className='bg-red-900 p-2 m-2 border rounded-md border-red-600'>
+				<p className='text-red-500 text-xs'>
 					Brak pozycji. Przejdź do edytora, aby stworzyć nową.
 					<Link
-						href='./employeeManagement/editPositions'
+						href='./editPositions'
 						className='underline'
 					>
 						- Kliknij tutaj, aby dodać nową pozycję. -

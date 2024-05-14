@@ -10,6 +10,7 @@ interface LoginFormData {
 interface Errors {
 	email: string | null;
 	password: string | null;
+	general: string | null;
 }
 
 export default function LoginForm() {
@@ -17,7 +18,11 @@ export default function LoginForm() {
 		email: "",
 		password: "",
 	});
-	const [error, setError] = useState<string | null>(null);
+	const [errors, setErrors] = useState<Errors>({
+		email: null,
+		password: null,
+		general: null,
+	});
 
 	const login = useLogin();
 
@@ -30,33 +35,38 @@ export default function LoginForm() {
 	};
 
 	function validateInput(email: string, password: string): Errors {
-		const errors: Errors = { email: null, password: null };
-		if (!email) {
-			errors.email = "Wpisz adres E-mail.";
-		} else if (!/\S+@\S+\.\S+/.test(email)) {
-			errors.email = "Adres E-mail jest niepoprawny.";
-		}
-		if (!password) {
-			errors.password = "Podaj hasło.";
-		} else if (password.length < 6) {
-			errors.password = "Hasło musi mieć conajmniej 6 znaków długości.";
-		}
-		return errors;
+		return {
+			email: !email
+				? "Wpisz adres E-mail."
+				: !/\S+@\S+\.\S+/.test(email)
+				? "Adres E-mail jest niepoprawny."
+				: null,
+			password: !password
+				? "Podaj hasło."
+				: password.length < 6
+				? "Hasło musi mieć conajmniej 6 znaków długości."
+				: null,
+			general: null,
+		};
 	}
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		const errors = validateInput(formData.email, formData.password);
-		setError(null);
-		if (Object.keys(errors).length > 0) {
-			setError(errors.email || errors.password);
+		setErrors(errors);
+		if (errors.email || errors.password) {
 			return;
 		}
 		try {
 			await login(formData.email, formData.password);
 		} catch (error: any) {
-			setError(error.message);
+			setErrors(error.message);
 		}
+	};
+
+	const renderErrors = () => {
+		const { general } = errors;
+		return general ? <p className='text-red-500 text-xs'>{general}</p> : null;
 	};
 
 	return (
@@ -79,6 +89,7 @@ export default function LoginForm() {
 					className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
 				/>
 			</div>
+			{errors.email && <p className='text-red-500 text-xs'>{errors.email}</p>}
 			<div>
 				<label
 					htmlFor='password'
@@ -94,11 +105,10 @@ export default function LoginForm() {
 					className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
 				/>
 			</div>
-			{error && (
-				<div className='text-white bg-red-900 border rounded-md p-2 m-2 text-center'>
-					{error}
-				</div>
+			{errors.password && (
+				<p className='text-red-500 text-xs'>{errors.password}</p>
 			)}
+			{renderErrors()}
 			<button
 				type='submit'
 				className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-indigo-900 dark:hover:bg-indigo-800 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'

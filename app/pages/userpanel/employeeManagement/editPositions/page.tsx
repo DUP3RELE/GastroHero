@@ -13,9 +13,19 @@ interface Position {
 	access: string;
 }
 
+interface Errors {
+	position: string | null;
+	access: string | null;
+	general: string | null;
+}
+
 export default function PositionManagement() {
 	const [positions, setPositions] = useState<Position[]>([]);
-	const [error, setError] = useState<string | null>(null);
+	const [errors, setErrors] = useState<Errors>({
+		position: null,
+		access: null,
+		general: null,
+	});
 	const [expandedId, setExpandedId] = useState<number | null>(null);
 	const [newPosition, setNewPosition] = useState("");
 	const [newAccess, setNewAccess] = useState<string[]>([]);
@@ -37,16 +47,33 @@ export default function PositionManagement() {
 		fetchPositions();
 	}, []);
 
+	function validateInput(position: string, access: string): Errors {
+		return {
+			position: !position
+				? "Wpisz nazwę pozycji!."
+				: position.length < 4
+				? "Nazwa pozycji jest za krótka."
+				: null,
+			access: !access ? "Zaznacz dostępy dla konta." : null,
+			general: null,
+		};
+	}
+
 	const fetchPositions = async () => {
 		try {
 			const fetchedPositions = await getPositions(restaurant_id);
 			setPositions(fetchedPositions);
 		} catch (error: any) {
-			setError(error.message);
+			setErrors(error.message);
 		}
 	};
 
 	const handleUpdate = async (positionId: number) => {
+		const errors = validateInput(newPosition, newAccess.join(","));
+		setErrors(errors);
+		if (errors.access || errors.position) {
+			return;
+		}
 		try {
 			await updatePosition(
 				{ restaurant_id, position: newPosition, access: newAccess.join(",") },
@@ -55,7 +82,7 @@ export default function PositionManagement() {
 			fetchPositions();
 			setExpandedId(null);
 		} catch (error: any) {
-			setError(error.message);
+			setErrors(error.message);
 		}
 	};
 
@@ -64,11 +91,16 @@ export default function PositionManagement() {
 			await deletePosition(positionId);
 			fetchPositions();
 		} catch (error: any) {
-			setError(error.message);
+			setErrors(error.message);
 		}
 	};
 
 	const handleAddPosition = async () => {
+		const errors = validateInput(newPositionName, newPositionAccess.join(","));
+		setErrors(errors);
+		if (errors.access || errors.position) {
+			return;
+		}
 		try {
 			await createPosition({
 				restaurant_id,
@@ -80,8 +112,13 @@ export default function PositionManagement() {
 			setNewPositionName("");
 			setNewPositionAccess([]);
 		} catch (error: any) {
-			setError(error.message);
+			setErrors(error.message);
 		}
+	};
+
+	const renderErrors = () => {
+		const { general } = errors;
+		return general ? <p className='text-red-500 text-xs'>{general}</p> : null;
 	};
 
 	return (
@@ -115,7 +152,7 @@ export default function PositionManagement() {
 						<div className='bg-white p-2 rounded mt-2 text-black'>
 							<div>
 								<label>
-									Position:
+									Nazwa Pozycji:
 									<input
 										type='text'
 										value={newPosition}
@@ -124,6 +161,9 @@ export default function PositionManagement() {
 									/>
 								</label>
 							</div>
+							{errors.position && (
+								<p className='text-red-500 text-xs'>{errors.position}</p>
+							)}
 							<div>
 								<label>Dostęp:</label>
 								<div>
@@ -146,6 +186,10 @@ export default function PositionManagement() {
 										)
 									)}
 								</div>
+								{errors.access && (
+									<p className='text-red-500 text-xs'>{errors.access}</p>
+								)}
+								{renderErrors()}
 							</div>
 							<button
 								className='mt-2 ml-2 py-1 px-3 border rounded-md bg-blue-500 hover:bg-blue-600 text-white'
@@ -177,6 +221,9 @@ export default function PositionManagement() {
 							className='border p-2 rounded'
 						/>
 					</div>
+					{errors.position && (
+						<p className='text-red-500 text-xs'>{errors.position}</p>
+					)}
 					<div>
 						<label>Dostępy:</label>
 						{["Dostęp 1", "Dostęp 2", "Dostęp 3", "Dostęp 4"].map(
@@ -198,6 +245,10 @@ export default function PositionManagement() {
 							)
 						)}
 					</div>
+					{errors.access && (
+						<p className='text-red-500 text-xs'>{errors.access}</p>
+					)}
+					{renderErrors()}
 					<button
 						onClick={handleAddPosition}
 						className='bg-green-500 text-white px-4 py-2 rounded'

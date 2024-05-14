@@ -12,8 +12,15 @@ interface EmployeePositionData {
 }
 
 export default function EmployeeManagement() {
-	const token = localStorage.getItem("token");
-	const restaurantId = localStorage.getItem("restaurant_id");
+	const token = String(
+		typeof window !== "undefined" ? window.localStorage.getItem("token") : false
+	);
+	const restaurantId = String(
+		typeof window !== "undefined"
+			? window.localStorage.getItem("restaurant_id")
+			: false
+	);
+
 	const [expandedId, setExpandedId] = useState(null);
 	const [editPosition, setEditPosition] = useState("");
 
