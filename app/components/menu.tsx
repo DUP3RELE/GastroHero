@@ -55,6 +55,7 @@ const Menu = () => {
 		}
 	}, [isAuthenticated]);
 
+	// wrap it up?
 	const handleLogout = () => {
 		logoutAction();
 		router.push("/");
