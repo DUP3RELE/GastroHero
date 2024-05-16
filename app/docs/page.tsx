@@ -7,13 +7,53 @@ const Docs = () => {
 			<Accordion title='1. Główne założenia aplikacji'>
 				<p className='w-3/4'>
 					Aplikacja GastroHero służy do szerokopojętego zarządzania restauracją.
-					Użytkownik najpierw tworzy profil restauracji, w której rejestruje pracowników. Główny użytkownik może w profilu restauracji tworzyć konta pracowników, nadawać im uprawnienia (np.: kucharz ma wgląd do receptur i mepa, a kelner ma wgląd do rezerwacji, zamówień na sali, stanu dań - gdy czegoś brakuje - itp.). Aplikacja posiada czaty pracownicze, które również mogą być dzielone na grupy pracowników. 
+					Użytkownik najpierw tworzy profil restauracji, w której rejestruje
+					pracowników. Główny użytkownik może w profilu restauracji tworzyć
+					konta pracowników, nadawać im uprawnienia (np.: kucharz ma wgląd do
+					receptur i mepa, a kelner ma wgląd do rezerwacji, zamówień na sali,
+					stanu dań - gdy czegoś brakuje - itp.). Aplikacja posiada czaty
+					pracownicze, które również mogą być dzielone na grupy pracowników.
 				</p>
 			</Accordion>
-			<Accordion title='Tytuł Dokumentu 2'>
+			<Accordion title='Technologia'>
+				<p className='w-3/4'>
+					<p>
+						- Frontend - Frontend aplikacji napisany jest w React, za pomocą
+						biblioteki Next14.js. W tej części projektu korzystam z supersetu
+						TypeScript, do stylowania używam biblioteki TailwindCSS.{" "}
+					</p>
+					<p>
+						- Backend - Serwer aplikacji zbudowany jest w języku programowania
+						Python, za pomocą biblioteki Flask. Obsługuję w nim rządania CORS
+						(Cross-Origin Resource Sharing), a także generuję tokeny JWT w celu
+						autoryzacji użytkownika.
+					</p>
+				</p>
+			</Accordion>
+			<Accordion title='Aktualna wersja'>
+				<p className='w-3/4'>
+					Użytkownik jest w stanie stworzyć konto restauracji, a następnie
+					utworzyć konta pracownicze, i przypisać do nich utworzone przez siebie
+					role - pozycje.
+				</p>
+			</Accordion>
+			<Accordion title='Co jeszcze chciałbym dodać?'>
 				<p className='w-3/4'>
 					zamówienia, rezerwację, czat pracowniczy, statystyki dań, godziny
 					pracowników, receptury, mep pracowniczy, stany magazynowe.
+				</p>
+			</Accordion>
+			<Accordion title='Repozytoria'>
+				<p className='w-3/4'>
+					<p>
+						Frontend -{" "}
+						<a href='https://github.com/DUP3RELE/GastroHero'>GastroHero</a> -{" "}
+					</p>
+					<p>
+						Backend -
+						<a href='https://github.com/DUP3RELE/HotpotEngine'>HotpotEngine</a>{" "}
+						-
+					</p>
 				</p>
 			</Accordion>
 		</div>
