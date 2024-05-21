@@ -24,7 +24,8 @@ const Docs = () => {
 					</p>
 					<p>
 						- Backend - Serwer aplikacji zbudowany jest w języku programowania
-						Python, za pomocą biblioteki Flask. Obsługuję w nim rządania CORS
+						Python, za pomocą biblioteki Flask. Baza danych jest zarządzana za
+						pomocą SQLAlchemy. Obsługuję w tej części aplikacji rządania CORS
 						(Cross-Origin Resource Sharing), a także generuję tokeny JWT w celu
 						autoryzacji użytkownika.
 					</p>
