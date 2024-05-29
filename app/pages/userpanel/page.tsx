@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import Workers from "@/app/components/datablocks/workers";
 import MealData from "@/app/components/datablocks/restaurantData";
+import RecipiesData from "@/app/components/datablocks/recipies";
 import { useRouter } from "next/navigation";
 import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
 import { useAuth } from "@/app/api/hooks/useAuthToken";
@@ -38,7 +39,7 @@ export default function RestaurantProfile() {
 			</div>
 			<div className='flex w-screen flex-wrap'>
 				<Workers />
-				<MealData />
+				<RecipiesData />
 				<MealData />
 				<MealData />
 				<MealData />
