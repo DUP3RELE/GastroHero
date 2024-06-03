@@ -16,7 +16,7 @@ const Docs = () => {
 				</p>
 			</Accordion>
 			<Accordion title='Technologia'>
-				<p className='w-3/4'>
+				<div className='w-3/4'>
 					<p>
 						- Frontend - Frontend aplikacji napisany jest w React, za pomocą
 						biblioteki Next14.js. W tej części projektu korzystam z supersetu
@@ -29,7 +29,7 @@ const Docs = () => {
 						(Cross-Origin Resource Sharing), a także generuję tokeny JWT w celu
 						autoryzacji użytkownika.
 					</p>
-				</p>
+				</div>
 			</Accordion>
 			<Accordion title='Aktualna wersja'>
 				<p className='w-3/4'>
@@ -45,7 +45,7 @@ const Docs = () => {
 				</p>
 			</Accordion>
 			<Accordion title='Repozytoria'>
-				<p className='w-3/4'>
+				<div className='w-3/4'>
 					<p>
 						Frontend -{" "}
 						<a href='https://github.com/DUP3RELE/GastroHero'>GastroHero</a> -{" "}
@@ -55,7 +55,7 @@ const Docs = () => {
 						<a href='https://github.com/DUP3RELE/HotpotEngine'>HotpotEngine</a>{" "}
 						-
 					</p>
-				</p>
+				</div>
 			</Accordion>
 		</div>
 	);

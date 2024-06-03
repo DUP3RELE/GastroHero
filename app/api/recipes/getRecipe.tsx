@@ -1,7 +1,7 @@
 import { access } from "fs";
 import { useState, useCallback } from "react";
 
-interface Recipe {
+export interface Recipe {
 	id: number;
 	title: string;
 	content_ingredients: string;
