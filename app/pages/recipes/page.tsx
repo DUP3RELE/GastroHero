@@ -1,10 +1,13 @@
 "use client";
 import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
 import { getRecipes } from "@/app/api/recipes/getRecipe";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
 import { deleteRecipe } from "@/app/api/recipes/deleteRecipe";
-import { Recipe } from "@/app/api/recipes/getRecipe";
+import { editRecipe } from "@/app/api/recipes/editRecipe";
+import Modal from "@/app/components/modal";
+import { RecipeEditData } from "@/app/api/recipes/editRecipe";
+import { title } from "process";
 
 export default function recipies() {
 	const token = String(
@@ -20,6 +23,11 @@ export default function recipies() {
 		parseInt(restaurantId!)
 	);
 	const [openRecipeId, setOpenRecipeId] = useState<number | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [newTitle, setNewTitle] = useState("");
+	const [newContent_ingredients, setNewContent_ingredients] = useState("");
+	const [newContent_methods, setNewContent_methods] = useState("");
+	const [recipeId, setRecipeId] = useState<number | null>(null);
 
 	const { restaurantName } = useRestaurantName(token || "");
 
@@ -38,6 +46,25 @@ export default function recipies() {
 			fetchRecipes();
 		} catch (error) {
 			console.error("Error:", error);
+		}
+	};
+	const handleEdit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		try {
+			await editRecipe({
+				restaurantId,
+				title: newTitle,
+				content_ingredients: newContent_ingredients,
+				content_methods: newContent_methods.join(","),
+			});
+			fetchRecipes();
+			setIsModalOpen(false);
+			setNewTitle("");
+			setNewContent_ingredients("");
+			setNewContent_methods("");
+			console.log("Przepis edytowany!");
+		} catch (error) {
+			console.error(error);
 		}
 	};
 	return (
@@ -100,7 +127,10 @@ export default function recipies() {
 									{new Date(recipe.date_added).toLocaleDateString()}
 								</p>
 								<div className='flex justify-end mt-4'>
-									<button className='bg-yellow-500 text-white px-2 py-1 rounded mr-2'>
+									<button
+										onClick={() => setIsModalOpen(true)}
+										className='bg-yellow-500 text-white px-2 py-1 rounded mr-2'
+									>
 										Edytuj przepis
 									</button>
 									<button
@@ -115,6 +145,57 @@ export default function recipies() {
 					</div>
 				))}
 			</div>
+			{isModalOpen && (
+				<Modal onClose={() => setIsModalOpen(false)}>
+					<h2>Edytuj Recepturę</h2>
+					<form
+						action='editRecipe'
+						method='post'
+					>
+						<div>
+							<label htmlFor='new-position-name'>Nazwa Receptury:</label>
+							<input
+								type='text'
+								id='new-position-name'
+								value={title}
+								onChange={(e) => setNewTitle(e.target.value)}
+								className='border p-2 rounded'
+							/>
+							<div>
+								<label htmlFor='new-position-ingridients'>Składniki:</label>
+								<textarea
+									id='new-position-ingridients'
+									value={newContent_ingredients}
+									onChange={(e) => setNewContent_ingredients(e.target.value)}
+									className='border p-2 rounded'
+								/>
+							</div>
+							<div>
+								<label htmlFor='new-position-methods'>Składniki:</label>
+								<textarea
+									id='new-position-methods'
+									value={newContent_methods}
+									onChange={(e) => setNewContent_methods(e.target.value)}
+									className='border p-2 rounded'
+								/>
+							</div>
+						</div>
+
+						<button
+							onClick={handleEdit}
+							className='bg-green-500 text-white px-4 py-2 rounded'
+						>
+							Zapisz zmainy
+						</button>
+						<button
+							onClick={() => setIsModalOpen(false)}
+							className='bg-red-500 text-white px-4 py-2 rounded'
+						>
+							Anuluj
+						</button>
+					</form>
+				</Modal>
+			)}
 		</div>
 	);
 }

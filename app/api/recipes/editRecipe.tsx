@@ -1,11 +1,14 @@
-interface RecipeEditData {
+export interface RecipeEditData {
 	title: string;
 	content_ingredients: string;
 	content_methods: string;
 	employee_id: number;
 }
 
-export const editRecipe = async (recipeId: number, formData: RecipeEditData) => {
+export const editRecipe = async (
+	recipeId: number,
+	formData: RecipeEditData
+) => {
 	const token = localStorage.getItem("token");
 	if (!token) {
 		console.error("Brak tokenu JWT.");
