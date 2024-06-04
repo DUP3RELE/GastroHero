@@ -7,9 +7,8 @@ import { deleteRecipe } from "@/app/api/recipes/deleteRecipe";
 import { editRecipe } from "@/app/api/recipes/editRecipe";
 import Modal from "@/app/components/modal";
 import { RecipeEditData } from "@/app/api/recipes/editRecipe";
-import { title } from "process";
 
-export default function recipies() {
+export default function Recipies() {
 	const token = String(
 		typeof window !== "undefined" ? window.localStorage.getItem("token") : false
 	);
@@ -27,7 +26,6 @@ export default function recipies() {
 	const [newTitle, setNewTitle] = useState("");
 	const [newContent_ingredients, setNewContent_ingredients] = useState("");
 	const [newContent_methods, setNewContent_methods] = useState("");
-	const [recipeId, setRecipeId] = useState<number | null>(null);
 
 	const { restaurantName } = useRestaurantName(token || "");
 
@@ -35,11 +33,11 @@ export default function recipies() {
 		fetchRecipes();
 	}, [fetchRecipes]);
 
-	const handleOpen = (id: any) => {
+	const handleOpen = (id: number) => {
 		setOpenRecipeId(openRecipeId === id ? null : id);
 	};
 
-	const handleDelete = async (id: any) => {
+	const handleDelete = async (id: number) => {
 		try {
 			await deleteRecipe(id);
 			setOpenRecipeId(null);
@@ -48,15 +46,19 @@ export default function recipies() {
 			console.error("Error:", error);
 		}
 	};
-	const handleEdit = async (e: FormEvent<HTMLFormElement>) => {
+
+	const handleEdit = async (e: FormEvent, id: number) => {
 		e.preventDefault();
 		try {
-			await editRecipe({
-				restaurantId,
-				title: newTitle,
-				content_ingredients: newContent_ingredients,
-				content_methods: newContent_methods.join(","),
-			});
+			await editRecipe(
+				{
+					title: newTitle,
+					content_ingredients: newContent_ingredients,
+					content_methods: newContent_methods,
+					employee_id: parseInt(restaurantId),
+				},
+				id
+			);
 			fetchRecipes();
 			setIsModalOpen(false);
 			setNewTitle("");
@@ -67,6 +69,7 @@ export default function recipies() {
 			console.error(error);
 		}
 	};
+
 	return (
 		<div className='w-full m-5'>
 			<div className='flex justify-between w-full m-2'>
@@ -148,51 +151,52 @@ export default function recipies() {
 			{isModalOpen && (
 				<Modal onClose={() => setIsModalOpen(false)}>
 					<h2>Edytuj Recepturę</h2>
-					<form
-						action='editRecipe'
-						method='post'
-					>
-						<div>
-							<label htmlFor='new-position-name'>Nazwa Receptury:</label>
-							<input
-								type='text'
-								id='new-position-name'
-								value={title}
-								onChange={(e) => setNewTitle(e.target.value)}
-								className='border p-2 rounded'
-							/>
-							<div>
+					<form onSubmit={(e) => handleEdit(e, openRecipeId!)}>
+						<div className='w-full'>
+							<div className='flex flex-col'>
+								<label htmlFor='new-position-name'>Nazwa Receptury:</label>
+								<input
+									type='text'
+									id='new-position-name'
+									value={newTitle}
+									onChange={(e) => setNewTitle(e.target.value)}
+									className='border p-2 rounded'
+								/>
+							</div>
+							<div className='flex flex-col'>
 								<label htmlFor='new-position-ingridients'>Składniki:</label>
 								<textarea
 									id='new-position-ingridients'
 									value={newContent_ingredients}
 									onChange={(e) => setNewContent_ingredients(e.target.value)}
-									className='border p-2 rounded'
+									className='border p-2 rounded resize-none'
 								/>
 							</div>
-							<div>
-								<label htmlFor='new-position-methods'>Składniki:</label>
+							<div className='flex flex-col'>
+								<label htmlFor='new-position-methods'>Techniki:</label>
 								<textarea
 									id='new-position-methods'
 									value={newContent_methods}
 									onChange={(e) => setNewContent_methods(e.target.value)}
-									className='border p-2 rounded'
+									className='border p-2 rounded resize-none'
 								/>
 							</div>
 						</div>
-
-						<button
-							onClick={handleEdit}
-							className='bg-green-500 text-white px-4 py-2 rounded'
-						>
-							Zapisz zmainy
-						</button>
-						<button
-							onClick={() => setIsModalOpen(false)}
-							className='bg-red-500 text-white px-4 py-2 rounded'
-						>
-							Anuluj
-						</button>
+						<div className="m-2">
+							<button
+								type='submit'
+								className='bg-green-500 text-white px-4 m-2 py-2 rounded'
+							>
+								Zapisz zmiany
+							</button>
+							<button
+								type='button'
+								onClick={() => setIsModalOpen(false)}
+								className='bg-red-500 text-white px-4 m-2 py-2 rounded'
+							>
+								Anuluj
+							</button>
+						</div>
 					</form>
 				</Modal>
 			)}

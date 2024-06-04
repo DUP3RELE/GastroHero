@@ -6,8 +6,8 @@ export interface RecipeEditData {
 }
 
 export const editRecipe = async (
-	recipeId: number,
-	formData: RecipeEditData
+	formData: RecipeEditData,
+	recipeId: number
 ) => {
 	const token = localStorage.getItem("token");
 	if (!token) {
