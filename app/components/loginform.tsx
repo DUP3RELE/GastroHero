@@ -3,23 +3,23 @@ import { useState, FormEvent } from "react";
 import { useLogin } from "../api/login";
 
 interface LoginFormData {
-	email: string;
+	identifier: string;
 	password: string;
 }
 
 interface Errors {
-	email: string | null;
+	identifier: string | null;
 	password: string | null;
 	general: string | null;
 }
 
 export default function LoginForm() {
 	const [formData, setFormData] = useState<LoginFormData>({
-		email: "",
+		identifier: "",
 		password: "",
 	});
 	const [errors, setErrors] = useState<Errors>({
-		email: null,
+		identifier: null,
 		password: null,
 		general: null,
 	});
@@ -34,13 +34,9 @@ export default function LoginForm() {
 		}));
 	};
 
-	function validateInput(email: string, password: string): Errors {
+	function validateInput(identifier: string, password: string): Errors {
 		return {
-			email: !email
-				? "Wpisz adres E-mail."
-				: !/\S+@\S+\.\S+/.test(email)
-				? "Adres E-mail jest niepoprawny."
-				: null,
+			identifier: !identifier ? "Wpisz adres E-mail lub login." : null,
 			password: !password
 				? "Podaj hasło."
 				: password.length < 6
@@ -52,15 +48,15 @@ export default function LoginForm() {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		const errors = validateInput(formData.email, formData.password);
+		const errors = validateInput(formData.identifier, formData.password);
 		setErrors(errors);
-		if (errors.email || errors.password) {
+		if (errors.identifier || errors.password) {
 			return;
 		}
 		try {
-			await login(formData.email, formData.password);
+			await login(formData.identifier, formData.password);
 		} catch (error: any) {
-			setErrors(error.message);
+			setErrors({ ...errors, general: error.message });
 		}
 	};
 
@@ -76,20 +72,22 @@ export default function LoginForm() {
 		>
 			<div>
 				<label
-					htmlFor='email'
+					htmlFor='identifier'
 					className='block text-sm font-medium text-gray-700 dark:text-gray-200'
 				>
-					Email
+					Email lub login
 				</label>
 				<input
-					type='email'
-					name='email'
-					value={formData.email}
+					type='text'
+					name='identifier'
+					value={formData.identifier}
 					onChange={handleChange}
 					className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-indigo-400 dark:focus:border-indigo-400'
 				/>
 			</div>
-			{errors.email && <p className='text-red-500 text-xs'>{errors.email}</p>}
+			{errors.identifier && (
+				<p className='text-red-500 text-xs'>{errors.identifier}</p>
+			)}
 			<div>
 				<label
 					htmlFor='password'
