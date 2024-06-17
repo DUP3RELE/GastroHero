@@ -3,7 +3,8 @@ import Link from "next/link";
 import { GetEmployees } from "@/app/api/employees/getEmployees";
 
 export default function Workers() {
-	const token = localStorage.getItem("token");
+	const token =
+		typeof window !== "undefined" ? localStorage.getItem("token") : "";
 	const restaurantId = localStorage.getItem("restaurant_id");
 	const { employees, fetchEmployees, error } = GetEmployees(
 		token!,

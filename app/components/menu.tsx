@@ -4,16 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../api/hooks/useAuthToken";
-interface RestaurantData {
-	restaurantname: string;
-}
+import { useRestaurantName } from "../api/hooks/useRestaurantName";
+import { useEmployeeName } from "../api/hooks/useEmployeeName";
 
 const Menu = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
-	const { isAuthenticated, logoutAction } = useAuth();
-	const [restaurantName, setRestaurantName] = useState<string>("");
+	const { logoutAction, userType } = useAuth();
 	const router = useRouter();
+	const token =
+		typeof window !== "undefined" ? localStorage.getItem("token") : false;
 
 	const handleClickOutside = (event: MouseEvent) => {
 		if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -21,44 +21,12 @@ const Menu = () => {
 		}
 	};
 
-	useEffect(() => {
-		const fetchRestaurantName = async () => {
-			const token = localStorage.getItem("token");
-			if (!token) {
-				console.error("Brak tokenu, użytkownik niezalogowany");
-				return;
-			}
+	const { restaurantName } = useRestaurantName(token || "");
+	const { employeeName } = useEmployeeName(token || "");
 
-			try {
-				const response = await fetch("http://127.0.0.1:5000/api/protected", {
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-
-				if (response.ok) {
-					const data: RestaurantData = await response.json();
-					setRestaurantName(data.restaurantname);
-				} else {
-					throw new Error("Nie udało się pobrać danych");
-				}
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		const token = localStorage.getItem("token");
-		if (token) {
-			fetchRestaurantName();
-		} else {
-			setRestaurantName("");
-		}
-	}, [isAuthenticated]);
-
-	// wrap it up?
 	const handleLogout = () => {
 		logoutAction();
-		router.push("/");
+		router.push("./pages/userpanel/login");
 	};
 
 	return (
@@ -138,7 +106,7 @@ const Menu = () => {
 										Dokumentacja
 									</button>
 								</Link>
-								{!restaurantName && (
+								{!restaurantName && !employeeName && (
 									<>
 										<Link href='/pages/userpanel/register'>
 											<button
@@ -167,6 +135,26 @@ const Menu = () => {
 											<Link href='/pages/userpanel'>
 												<button className='bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'>
 													Panel użytkownika
+												</button>
+											</Link>
+											<button
+												onClick={handleLogout}
+												className='bg-red-600 mt-2 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'
+											>
+												Wyloguj Się
+											</button>
+										</div>
+									</div>
+								)}
+								{employeeName && (
+									<div className='relative group'>
+										<button className='text-white px-3 py-2 rounded-md text-sm font-medium bg-gray-900 cursor-default'>
+											{employeeName}
+										</button>
+										<div className='absolute bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity'>
+											<Link href='/pages/userpanel/employeePanel'>
+												<button className='bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'>
+													Panel pracownika
 												</button>
 											</Link>
 											<button
@@ -208,7 +196,7 @@ const Menu = () => {
 							</div>
 						</Link>
 					</div>
-					{!restaurantName && (
+					{!restaurantName && !employeeName && (
 						<>
 							<div className='px-2 pt-2 pb-3 space-y-1'>
 								<Link href='/pages/userpanel/register'>
@@ -241,6 +229,26 @@ const Menu = () => {
 								<Link href='/pages/userpanel'>
 									<button className='bg-gray-900 m-2 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'>
 										Panel użytkownika
+									</button>
+								</Link>
+								<button
+									onClick={handleLogout}
+									className='bg-red-600 m-2 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'
+								>
+									Wyloguj Się
+								</button>
+							</div>
+						</div>
+					)}
+					{employeeName && (
+						<div className='relative group px-2 pt-2 pb-3 space-y-1 '>
+							<button className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'>
+								{employeeName}
+							</button>
+							<div className='absolute flex-col bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity'>
+								<Link href='/pages/userpanel/employeePanel'>
+									<button className='bg-gray-900 m-2 text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer'>
+										Panel pracownika
 									</button>
 								</Link>
 								<button

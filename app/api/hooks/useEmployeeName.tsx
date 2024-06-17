@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 
 interface EmployeeData {
 	employeename: string;
+	employeeposition: string;
 	loading: boolean;
 	error: string | null;
 }
 
 export const useEmployeeName = (token: string) => {
 	const [employeeName, setEmployeeName] = useState<string>("");
+	const [employeePosition, setEmployeePosition] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +31,7 @@ export const useEmployeeName = (token: string) => {
 				if (response.ok) {
 					const data: EmployeeData = await response.json();
 					setEmployeeName(data.employeename);
+					setEmployeePosition(data.employeeposition);
 					setLoading(false);
 				} else {
 					throw new Error("Nie udało się pobrać danych");
@@ -43,5 +46,5 @@ export const useEmployeeName = (token: string) => {
 
 		fetchEmployeeName();
 	}, [token]);
-	return { employeeName, loading, error };
+	return { employeeName, employeePosition, loading, error };
 };

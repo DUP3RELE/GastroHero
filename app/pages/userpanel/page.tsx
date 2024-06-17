@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Workers from "@/app/components/datablocks/workers";
 import MealData from "@/app/components/datablocks/restaurantData";
 import RecipiesData from "@/app/components/datablocks/recipies";
