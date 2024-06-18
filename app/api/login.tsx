@@ -36,7 +36,7 @@ export const useLogin = () => {
 					router.push("../userpanel/employeePanel");
 				}
 
-				loginAction();
+				loginAction(data.userType);
 			} else {
 				const errorData = await response.json();
 				throw new Error(errorData.message || "Nieznany błąd logowania.");

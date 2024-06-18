@@ -106,7 +106,7 @@ const Menu = () => {
 										Dokumentacja
 									</button>
 								</Link>
-								{!restaurantName && !employeeName && (
+								{!restaurantName && !employeeName  && (
 									<>
 										<Link href='/pages/userpanel/register'>
 											<button
@@ -126,7 +126,7 @@ const Menu = () => {
 										</Link>
 									</>
 								)}
-								{restaurantName && (
+								{userType == "restaurant" && restaurantName && (
 									<div className='relative group'>
 										<button className='text-white px-3 py-2 rounded-md text-sm font-medium bg-gray-900 cursor-default'>
 											{restaurantName}
@@ -146,7 +146,7 @@ const Menu = () => {
 										</div>
 									</div>
 								)}
-								{employeeName && (
+								{userType == "employee" && employeeName && (
 									<div className='relative group'>
 										<button className='text-white px-3 py-2 rounded-md text-sm font-medium bg-gray-900 cursor-default'>
 											{employeeName}
@@ -220,7 +220,7 @@ const Menu = () => {
 							</div>
 						</>
 					)}
-					{restaurantName && (
+					{userType == "restaurant" && restaurantName && (
 						<div className='relative group px-2 pt-2 pb-3 space-y-1 '>
 							<button className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'>
 								{restaurantName}
@@ -240,7 +240,7 @@ const Menu = () => {
 							</div>
 						</div>
 					)}
-					{employeeName && (
+					{userType == "employee" && employeeName && (
 						<div className='relative group px-2 pt-2 pb-3 space-y-1 '>
 							<button className='text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer'>
 								{employeeName}

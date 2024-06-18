@@ -5,7 +5,8 @@ import { GetEmployees } from "@/app/api/employees/getEmployees";
 export default function Workers() {
 	const token =
 		typeof window !== "undefined" ? localStorage.getItem("token") : "";
-	const restaurantId = localStorage.getItem("restaurant_id");
+	const restaurantId =
+		typeof window !== "undefined" ? localStorage.getItem("restaurant_id") : "";
 	const { employees, fetchEmployees, error } = GetEmployees(
 		token!,
 		parseInt(restaurantId!)
