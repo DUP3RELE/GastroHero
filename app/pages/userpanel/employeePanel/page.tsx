@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { useEmployeeName } from "@/app/api/hooks/useEmployeeName";
 import { useAuth } from "@/app/api/hooks/useAuthToken";
+import RecipiesData from "@/app/components/datablocks/recipies";
 
 interface EmployeeData {
 	employeename: string;
@@ -21,6 +21,9 @@ export default function employeePanel() {
 			<div>
 				<h1>Employee Name: {employeeName}</h1>
 				<h2>Position: {employeePosition}</h2>
+			</div>
+			<div>
+				<RecipiesData />
 			</div>
 		</>
 	);
