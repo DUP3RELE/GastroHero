@@ -24,6 +24,10 @@ export default function employeePanel() {
 			</div>
 			<div>
 				<RecipiesData />
+				<div>
+					<button>Add Recipe</button>
+					<button>edit recipe</button>
+				</div>
 			</div>
 		</>
 	);
