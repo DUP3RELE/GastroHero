@@ -6,7 +6,8 @@ import Link from "next/link";
 import { deleteRecipe } from "@/app/api/recipes/deleteRecipe";
 import { editRecipe } from "@/app/api/recipes/editRecipe";
 import Modal from "@/app/components/modal";
-import { RecipeEditData } from "@/app/api/recipes/editRecipe";
+import { useEmployeeName } from "@/app/api/hooks/useEmployeeName";
+import { useAuth } from "@/app/api/hooks/useAuthToken";
 
 export default function Recipies() {
 	const token = String(
@@ -28,6 +29,8 @@ export default function Recipies() {
 	const [newContent_methods, setNewContent_methods] = useState("");
 
 	const { restaurantName } = useRestaurantName(token || "");
+	const { employeeName } = useEmployeeName(token || "");
+	const { userType } = useAuth();
 
 	useEffect(() => {
 		fetchRecipes();
@@ -74,12 +77,12 @@ export default function Recipies() {
 		<div className='w-full m-5'>
 			<div className='flex justify-between w-full m-2'>
 				<div>
-					{restaurantName ? (
+					{userType == "restaurant" && restaurantName && (
 						<h1 className='m-2'>Witaj, {restaurantName}</h1>
-					) : (
-						<h1 className='m-2'>Ładowanie danych użytkownika...</h1>
 					)}
-					{error && <p className='text-red-500'>{error}</p>}
+					{userType == "employee" && employeeName && (
+						<h1 className='m-2'>Witaj, {employeeName}</h1>
+					)}
 				</div>
 				<div className='m-2'>
 					<Link
@@ -182,7 +185,7 @@ export default function Recipies() {
 								/>
 							</div>
 						</div>
-						<div className="m-2">
+						<div className='m-2'>
 							<button
 								type='submit'
 								className='bg-green-500 text-white px-4 m-2 py-2 rounded'
