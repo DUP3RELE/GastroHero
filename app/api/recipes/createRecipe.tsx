@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 export interface RecipeFormData {
 	restaurant_id: number;
 	title: string;
@@ -13,7 +15,7 @@ export const createRecipe = async (formData: RecipeFormData) => {
 	}
 
 	try {
-		const response = await fetch("http://127.0.0.1:5000/api/create_recipe", {
+		const response = await fetch(`${BASE_API_URL}/create_recipe`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 const deleteEmployee = async (employeeId: number) => {
 	const token = localStorage.getItem("token");
 	if (!token) {
@@ -6,7 +8,7 @@ const deleteEmployee = async (employeeId: number) => {
 
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/delete_employee/${employeeId}`,
+			`${BASE_API_URL}/delete_employee/${employeeId}`,
 			{
 				method: "DELETE",
 				headers: {

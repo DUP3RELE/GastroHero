@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BASE_API_URL } from "../config/api";
 
 interface RestaurantData {
 	restaurantname: string;
@@ -22,7 +23,7 @@ export const useRestaurantName = (token: string) => {
 			}
 
 			try {
-				const response = await fetch("http://127.0.0.1:5000/api/protected", {
+				const response = await fetch(`${BASE_API_URL}/protected`, {
 					method: "GET",
 					headers: {
 						Authorization: `Bearer ${token}`,

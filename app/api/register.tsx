@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { BASE_API_URL } from "./config/api";
 
 export const useRegister = () => {
 	const router = useRouter();
@@ -9,7 +10,7 @@ export const useRegister = () => {
 		password: string
 	) => {
 		try {
-			const response = await fetch("http://127.0.0.1:5000/api/register", {
+			const response = await fetch(`${BASE_API_URL}/register`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

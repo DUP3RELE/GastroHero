@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 interface EmployeePositionData {
 	position: string;
 }
@@ -14,7 +16,7 @@ const editEmployee = async (
 
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/edit_employee/${employeeId}`,
+			`${BASE_API_URL}/edit_employee/${employeeId}`,
 			{
 				method: "PUT",
 				headers: {

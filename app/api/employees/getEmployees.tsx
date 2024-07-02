@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { BASE_API_URL } from "../config/api";
 
 interface Employee {
 	id: number;
@@ -18,7 +19,7 @@ export const GetEmployees = (accessToken: string, restaurantId: number) => {
 
 		try {
 			const response = await fetch(
-				`http://127.0.0.1:5000/api/get_employees?restaurant_id=${restaurantId}`,
+				`${BASE_API_URL}/get_employees?restaurant_id=${restaurantId}`,
 				{
 					method: "GET",
 					headers: {

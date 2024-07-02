@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 export interface EmployeeFormData {
 	restaurant_id: number;
 	login: string;
@@ -14,7 +16,7 @@ const createEmployee = async (formData: EmployeeFormData) => {
 	console.log(JSON.stringify(formData));
 
 	try {
-		const response = await fetch("http://127.0.0.1:5000/api/create_employee", {
+		const response = await fetch(`${BASE_API_URL}/create_employee`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

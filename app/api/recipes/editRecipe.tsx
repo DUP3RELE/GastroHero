@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 export interface RecipeEditData {
 	title: string;
 	content_ingredients: string;
@@ -17,7 +19,7 @@ export const editRecipe = async (
 
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/edit_recipe/${recipeId}`,
+			`${BASE_API_URL}/edit_recipe/${recipeId}`,
 			{
 				method: "PUT",
 				headers: {

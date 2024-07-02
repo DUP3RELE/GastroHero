@@ -1,4 +1,4 @@
-import { access } from "fs";
+import { BASE_API_URL } from "../config/api";
 import { useState, useCallback } from "react";
 
 export interface Recipe {
@@ -21,7 +21,7 @@ export const getRecipes = (accessToken: string, restaurantId: number) => {
 
 		try {
 			const response = await fetch(
-				`http://127.0.0.1:5000/api/get_recipes?restaurant_id=${restaurantId}`,
+				`${BASE_API_URL}/get_recipes?restaurant_id=${restaurantId}`,
 				{
 					method: "GET",
 					headers: {

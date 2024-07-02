@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BASE_API_URL } from "../config/api";
 
 interface EmployeeData {
 	employeename: string;
@@ -24,10 +25,10 @@ export const useEmployeeName = (token: string) => {
 			}
 
 			try {
-				const response = await fetch(
-					"http://127.0.0.1:5000/api/employee_name",
-					{ method: "GET", headers: { Authorization: `Bearer ${token}` } }
-				);
+				const response = await fetch(`${BASE_API_URL}/employee_name`, {
+					method: "GET",
+					headers: { Authorization: `Bearer ${token}` },
+				});
 				if (response.ok) {
 					const data: EmployeeData = await response.json();
 					setEmployeeName(data.employeename);

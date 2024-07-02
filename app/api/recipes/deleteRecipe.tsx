@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 export const deleteRecipe = async (recipeId: number) => {
 	const token = localStorage.getItem("token");
 	if (!token) {
@@ -6,7 +8,7 @@ export const deleteRecipe = async (recipeId: number) => {
 
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/delete_recipe/${recipeId}`,
+			`${BASE_API_URL}/delete_recipe/${recipeId}`,
 			{
 				method: "DELETE",
 				headers: {

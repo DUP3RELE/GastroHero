@@ -1,3 +1,5 @@
+import { BASE_API_URL } from "../config/api";
+
 export interface EmployeePositionData {
 	restaurant_id: number;
 	position: string;
@@ -13,7 +15,7 @@ export const getPositions = async (restaurant_id: number) => {
 		}
 
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/positions?restaurant_id=${restaurant_id}`,
+			`${BASE_API_URL}/positions?restaurant_id=${restaurant_id}`,
 			{
 				method: "GET",
 				headers: {
