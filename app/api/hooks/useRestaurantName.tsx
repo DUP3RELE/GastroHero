@@ -32,9 +32,11 @@ export const useRestaurantName = (token: string) => {
 
 				if (response.ok) {
 					const data: RestaurantData = await response.json();
+					console.log("Otrzymane dane:", data);
 					setRestaurantName(data.restaurantname);
 				} else {
-					throw new Error("Nie udało się pobrać danych");
+					const errorText = await response.text();
+					throw new Error("Nie udało się pobrać danych: " + errorText);
 				}
 			} catch (error: any) {
 				console.error(error.message);

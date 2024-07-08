@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState,  useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -15,18 +15,13 @@ const Menu = () => {
 	const token =
 		typeof window !== "undefined" ? localStorage.getItem("token") : false;
 
-	const handleClickOutside = (event: MouseEvent) => {
-		if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-			setIsMobileMenuOpen(false);
-		}
-	};
 
 	const { restaurantName } = useRestaurantName(token || "");
 	const { employeeName } = useEmployeeName(token || "");
 
 	const handleLogout = () => {
 		logoutAction();
-		router.push("./pages/userpanel/login");
+		router.push("/pages/userpanel/login");
 	};
 
 	return (
