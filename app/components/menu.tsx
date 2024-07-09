@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,  useRef } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -15,9 +15,8 @@ const Menu = () => {
 	const token =
 		typeof window !== "undefined" ? localStorage.getItem("token") : false;
 
-
-	const { restaurantName } = useRestaurantName(token || "");
-	const { employeeName } = useEmployeeName(token || "");
+	const { restaurantName } = userType === "restaurant" ? useRestaurantName(token || "") : { restaurantName: "" };
+	const { employeeName } = userType === "employee" ? useEmployeeName(token || "") : { employeeName: "" };
 
 	const handleLogout = () => {
 		logoutAction();
@@ -101,7 +100,7 @@ const Menu = () => {
 										Dokumentacja
 									</button>
 								</Link>
-								{!restaurantName && !employeeName  && (
+								{!restaurantName && !employeeName && (
 									<>
 										<Link href='/pages/userpanel/register'>
 											<button
