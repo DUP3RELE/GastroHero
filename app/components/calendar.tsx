@@ -27,7 +27,7 @@ const MyCalendar: React.FC = () => {
 	]);
 
 	return (
-		<><div>Hello, @</div>
+		<><div>Hello, user name</div>
 			<div>
 				<Calendar
 					localizer={localizer}
