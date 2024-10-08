@@ -30,10 +30,21 @@ export const useLogin = () => {
 				localStorage.setItem("token", data.access_token);
 
 				if (data.userType === "restaurant") {
-					localStorage.setItem("restaurant_id", data.restaurant_id!.toString());
+					if (data.restaurant_id) {
+						localStorage.setItem(
+							"restaurant_id",
+							data.restaurant_id.toString()
+						);
+					} else {
+						throw new Error("Brak ID restauracji");
+					}
 					router.push("../userpanel");
 				} else if (data.userType === "employee") {
-					localStorage.setItem("employee_id", data.employee_id!.toString());
+					if (data.employee_id) {
+						localStorage.setItem("employee_id", data.employee_id.toString());
+					} else {
+						throw new Error("Brak ID pracownika");
+					}
 					router.push("../userpanel/employeePanel");
 				}
 
@@ -42,9 +53,9 @@ export const useLogin = () => {
 				const errorData = await response.json();
 				throw new Error(errorData.message || "Nieznany błąd logowania.");
 			}
-		} catch (error) {
-			console.error("Error:", error);
-			throw error;
+		} catch (error: any) {
+			console.error("Error:", error.message);
+			return { success: false, message: error.message || "Login failed" };
 		}
 	};
 

@@ -8,6 +8,14 @@ interface RestaurantData {
 }
 
 export const useRestaurantName = (token: string) => {
+	if (!token) {
+		return {
+			restaurantName: "",
+			loading: false,
+			error: "Brak tokenu, użytkownik niezalogowany",
+		};
+	}
+	
 	const [restaurantName, setRestaurantName] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
