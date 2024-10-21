@@ -1,35 +1,20 @@
 import { useState, useEffect } from "react";
 import { BASE_API_URL } from "../config/api";
 
-interface RestaurantData {
-	restaurantname: string;
-	loading: boolean;
-	error: string | null;
-}
-
-export const useRestaurantName = (token: string) => {
-	if (!token) {
-		return {
-			restaurantName: "",
-			loading: false,
-			error: "Brak tokenu, użytkownik niezalogowany",
-		};
-	}
-	
+export const useRestaurantName = (token: string | null) => {
 	const [restaurantName, setRestaurantName] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
+		if (!token) {
+			console.error("Brak tokenu, użytkownik niezalogowany");
+			setError("Brak tokenu, użytkownik niezalogowany");
+			setLoading(false);
+			setRestaurantName("");
+			return;
+		}
 		const fetchRestaurantName = async () => {
-			if (!token) {
-				console.error("Brak tokenu, użytkownik niezalogowany");
-				setError("Brak tokenu, użytkownik niezalogowany");
-				setLoading(false);
-				setRestaurantName("");
-				return;
-			}
-
 			try {
 				const response = await fetch(`${BASE_API_URL}/protected`, {
 					method: "GET",
@@ -39,7 +24,7 @@ export const useRestaurantName = (token: string) => {
 				});
 
 				if (response.ok) {
-					const data: RestaurantData = await response.json();
+					const data = await response.json();
 					console.log("Otrzymane dane:", data);
 					setRestaurantName(data.restaurantname);
 				} else {

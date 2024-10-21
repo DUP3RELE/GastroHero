@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useEffect,
+} from "react";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
@@ -14,9 +20,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [userType, setUserType] = useState<string | null>(null);
 
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		const storedUserType = localStorage.getItem("userType");
+
+		if (token && storedUserType) {
+			setIsAuthenticated(true);
+			setUserType(storedUserType);
+		}
+	}, []);
+
 	const loginAction = (type: string) => {
 		setIsAuthenticated(true);
 		setUserType(type);
+
 	};
 
 	const logoutAction = () => {

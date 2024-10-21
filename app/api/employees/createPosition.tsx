@@ -42,7 +42,7 @@ export const createPosition = async (PositionData: EmployeePositionData) => {
 			console.error("No JWT token is stored.");
 		}
 
-		const response = await fetch("http://127.0.0.1:5000/api/positions", {
+		const response = await fetch(`${BASE_API_URL}/positions`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const updatePosition = async (
 		const token = localStorage.getItem("token");
 
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/positions/${positionId}`,
+			`${BASE_API_URL}/positions/${positionId}`,
 			{
 				method: "PUT",
 				headers: {
@@ -98,7 +98,7 @@ export const deletePosition = async (positionId: number) => {
 		const token = localStorage.getItem("token");
 
 		const response = await fetch(
-			`http://127.0.0.1:5000/api/positions/${positionId}`,
+			`${BASE_API_URL}/positions/${positionId}`,
 			{
 				method: "DELETE",
 				headers: {

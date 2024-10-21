@@ -28,7 +28,6 @@ const CreatePositionForm = () => {
 			const response = await createPosition(positionData);
 			console.log("Position created:", response);
 
-			// Czyści formularz
 			setRestaurantId("");
 			setPosition("");
 			setAccess("");

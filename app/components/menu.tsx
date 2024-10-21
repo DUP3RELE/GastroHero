@@ -10,13 +10,17 @@ import { useEmployeeName } from "../api/hooks/useEmployeeName";
 const Menu = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
-	const { logoutAction, userType } = useAuth();
+	const { isAuthenticated, logoutAction, userType } = useAuth();
 	const router = useRouter();
-	const token =
-		typeof window !== "undefined" ? localStorage.getItem("token") : false;
+	const token = isAuthenticated ? localStorage.getItem("token") : "";
 
-	const { restaurantName } = userType === "restaurant" ? useRestaurantName(token || "") : { restaurantName: "" };
-	const { employeeName } = userType === "employee" ? useEmployeeName(token || "") : { employeeName: "" };
+	const { restaurantName } = useRestaurantName(
+		userType === "restaurant" && token ? token : ""
+	);
+	console.log(restaurantName);
+	const { employeeName } = useEmployeeName(
+		userType === "employee" && token ? token : ""
+	);
 
 	const handleLogout = () => {
 		logoutAction();

@@ -14,10 +14,13 @@ export default function recipiesCreate() {
 	const initialRestaurantId = parseInt(
 		localStorage.getItem("restaurant_id") || "0"
 	);
+	const initialEmployeeId = parseInt(
+		localStorage.getItem("employee_id") || "0"
+	);
 	const router = useRouter();
 	const [formData, setFormData] = useState<RecipeFormData>({
 		restaurant_id: initialRestaurantId,
-		employee_id: 1,
+		employee_id: initialEmployeeId,
 		title: "",
 		content_ingredients: "",
 		content_methods: "",
@@ -39,13 +42,15 @@ export default function recipiesCreate() {
 		}
 	};
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = e.target;
+		setFormData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+	};
 
 	return (
 		<>

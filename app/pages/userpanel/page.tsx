@@ -24,7 +24,7 @@ export default function RestaurantProfile() {
 
 	useEffect(() => {
 		if (!isAuthenticated && !token) {
-			router.push("/userpanel/login");
+			router.push("pages/userpanel/login");
 		}
 	}, [isAuthenticated, token, router]);
 
