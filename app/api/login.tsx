@@ -29,6 +29,8 @@ export const useLogin = () => {
 
 				localStorage.setItem("token", data.access_token);
 
+				localStorage.setItem("userType", data.userType);
+
 				if (data.userType === "restaurant") {
 					if (data.restaurant_id) {
 						localStorage.setItem(
@@ -40,8 +42,12 @@ export const useLogin = () => {
 					}
 					router.push("../userpanel");
 				} else if (data.userType === "employee") {
-					if (data.employee_id) {
+					if (data.employee_id && data.restaurant_id) {
 						localStorage.setItem("employee_id", data.employee_id.toString());
+						localStorage.setItem(
+							"restaurant_id",
+							data.restaurant_id.toString()
+						);
 					} else {
 						throw new Error("Brak ID pracownika");
 					}

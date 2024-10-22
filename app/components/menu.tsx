@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,9 @@ const Menu = () => {
 	const { employeeName } = useEmployeeName(
 		userType === "employee" && token ? token : ""
 	);
+
+	console.log(userType);
+	console.log(employeeName);
 
 	const handleLogout = () => {
 		logoutAction();

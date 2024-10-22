@@ -33,18 +33,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const loginAction = (type: string) => {
 		setIsAuthenticated(true);
 		setUserType(type);
-
 	};
 
 	const logoutAction = () => {
 		setIsAuthenticated(false);
 		setUserType(null);
-		localStorage.removeItem("token");
+		localStorage.clear();
 	};
 
 	return (
 		<AuthContext.Provider
-			value={{ isAuthenticated, userType, loginAction, logoutAction }}
+			value={{
+				isAuthenticated,
+				userType,
+				loginAction,
+				logoutAction,
+			}}
 		>
 			{children}
 		</AuthContext.Provider>
