@@ -17,13 +17,12 @@ const Menu = () => {
 	const { restaurantName } = useRestaurantName(
 		userType === "restaurant" && token ? token : ""
 	);
-	console.log(restaurantName);
+	
 	const { employeeName } = useEmployeeName(
 		userType === "employee" && token ? token : ""
 	);
 
-	console.log(userType);
-	console.log(employeeName);
+	
 
 	const handleLogout = () => {
 		logoutAction();

@@ -9,7 +9,7 @@ export const useEmployeeName = (token: string | null) => {
 
 	useEffect(() => {
 		if (!token) {
-			console.error("Brak tokenu, użytkownik niezalogowany");
+	
 			setError("Brak tokenu, użytkownik niezalogowany");
 			setLoading(false);
 			setEmployeeName("");
@@ -24,7 +24,7 @@ export const useEmployeeName = (token: string | null) => {
 				});
 				if (response.ok) {
 					const data = await response.json();
-					console.log("Otrzymane dane:", data);
+				
 					setEmployeeName(data.employeename);
 					setEmployeePosition(data.employeeposition);
 					setLoading(false);
@@ -32,7 +32,7 @@ export const useEmployeeName = (token: string | null) => {
 					throw new Error("Nie udało się pobrać danych");
 				}
 			} catch (error: any) {
-				console.error(error.message);
+			
 				setError(error.message);
 			} finally {
 				setLoading(false);
