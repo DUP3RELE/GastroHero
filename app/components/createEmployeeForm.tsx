@@ -85,10 +85,11 @@ export default function CreateEmployeeForm() {
 		}
 		try {
 			await createEmployee(formData);
-			console.log("Pracownik został zarejstrowany");
 			router.push("../");
 		} catch (error) {
-			console.error("Nie udało się zarejstrować pracownika");
+			if (error) {
+				return;
+			}
 		}
 	};
 

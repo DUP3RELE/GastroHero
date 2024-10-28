@@ -26,7 +26,6 @@ const CreatePositionForm = () => {
 
 		try {
 			const response = await createPosition(positionData);
-			console.log("Position created:", response);
 
 			setRestaurantId("");
 			setPosition("");

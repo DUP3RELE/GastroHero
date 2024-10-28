@@ -10,10 +10,6 @@ export interface EmployeeFormData {
 
 const createEmployee = async (formData: EmployeeFormData) => {
 	const token = localStorage.getItem("token");
-	if (!token) {
-		console.error("No JWT token is stored.");
-	}
-	console.log(JSON.stringify(formData));
 
 	try {
 		const response = await fetch(`${BASE_API_URL}/create_employee`, {
@@ -31,7 +27,6 @@ const createEmployee = async (formData: EmployeeFormData) => {
 
 		return await response.json();
 	} catch (error) {
-		console.error("Error:", error);
 		throw error;
 	}
 };

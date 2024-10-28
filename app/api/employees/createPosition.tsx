@@ -10,7 +10,6 @@ export const getPositions = async (restaurant_id: number) => {
 	try {
 		const token = localStorage.getItem("token");
 		if (!token) {
-			console.error("No JWT token is stored.");
 			return;
 		}
 
@@ -30,7 +29,6 @@ export const getPositions = async (restaurant_id: number) => {
 
 		return await response.json();
 	} catch (error) {
-		console.error("Error fetching positions:", error);
 		throw error;
 	}
 };
@@ -38,9 +36,6 @@ export const getPositions = async (restaurant_id: number) => {
 export const createPosition = async (PositionData: EmployeePositionData) => {
 	try {
 		const token = localStorage.getItem("token");
-		if (!token) {
-			console.error("No JWT token is stored.");
-		}
 
 		const response = await fetch(`${BASE_API_URL}/positions`, {
 			method: "POST",
@@ -50,7 +45,6 @@ export const createPosition = async (PositionData: EmployeePositionData) => {
 			},
 			body: JSON.stringify(PositionData),
 		});
-		console.log("data:", PositionData);
 
 		if (!response.ok) {
 			throw new Error("Failed to create position");
@@ -58,7 +52,6 @@ export const createPosition = async (PositionData: EmployeePositionData) => {
 
 		return await response.json();
 	} catch (error) {
-		console.error("Error creating position:", error);
 		throw error;
 	}
 };
@@ -88,7 +81,6 @@ export const updatePosition = async (
 
 		return await response.json();
 	} catch (error) {
-		console.error("Error updating position:", error);
 		throw error;
 	}
 };
@@ -113,7 +105,6 @@ export const deletePosition = async (positionId: number) => {
 
 		return await response.json();
 	} catch (error) {
-		console.error("Error deleting position:", error);
 		throw error;
 	}
 };

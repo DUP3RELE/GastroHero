@@ -20,14 +20,12 @@ export const useRegister = () => {
 
 			if (response.ok) {
 				const data = await response.json();
-				console.log("Rejestracja zakończona sukcesem:", data);
 				router.push("/pages/userpanel/login");
 			} else {
 				const errorData = await response.json();
 				throw new Error(errorData.error || "Nieznany błąd rejestracji.");
 			}
 		} catch (error) {
-			console.error("Błąd:", error);
 			throw error;
 		}
 	};

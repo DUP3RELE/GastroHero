@@ -30,7 +30,6 @@ const PositionSelect: React.FC<PositionSelectProps> = ({ value, onChange }) => {
 				setPositions(positions);
 				setIsLoading(false);
 			} catch (error) {
-				console.error("Error fetching positions:", error);
 				setError("Failed to fetch positions.");
 				setIsLoading(false);
 			}

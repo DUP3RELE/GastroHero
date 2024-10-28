@@ -37,7 +37,6 @@ export const GetEmployees = (accessToken: string, restaurantId: number) => {
 				throw new Error(`Nie udało się pobrać danych pracowników: ${errMsg}`);
 			}
 		} catch (error: any) {
-			console.error(error.message);
 			setError(error.message);
 		}
 	}, [accessToken, restaurantId]);
