@@ -6,6 +6,7 @@ export interface RecipeFormData {
 	content_ingredients: string;
 	content_methods: string;
 	employee_id: number;
+	editor_name: string;
 }
 
 export const createRecipe = async (formData: RecipeFormData) => {

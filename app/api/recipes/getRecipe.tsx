@@ -8,6 +8,7 @@ export interface Recipe {
 	content_methods: string;
 	employee_id: number;
 	date_added: number;
+	editor_name: string;
 }
 export const getRecipes = (accessToken: string, restaurantId: number) => {
 	const [recipes, setRecipes] = useState<Recipe[]>([]);

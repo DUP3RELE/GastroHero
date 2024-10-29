@@ -126,10 +126,10 @@ export default function Recipies() {
 									<strong>Techniki:</strong> {recipe.content_methods}
 								</p>
 								<p>
-									<strong>Pracownik:</strong> {recipe.employee_id}
+									<strong>Pracownik:</strong> {recipe.editor_name}
 								</p>
 								<p>
-									<strong>Data dodania:</strong>{" "}
+									<strong>Data dodania:</strong>
 									{new Date(recipe.date_added).toLocaleDateString()}
 								</p>
 								<div className='flex justify-end mt-4'>

@@ -1,35 +1,49 @@
 "use client";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { createRecipe } from "@/app/api/recipes/createRecipe";
 import { RecipeFormData } from "@/app/api/recipes/createRecipe";
 import { useRouter } from "next/navigation";
+import { useEmployeeName } from "@/app/api/hooks/useEmployeeName";
+import { useRestaurantName } from "@/app/api/hooks/useRestaurantName";
 
 interface Errors {
 	title: string;
 	content_ingredients: string;
 	content_methods: string;
+	editor_name: string;
 }
 
 export default function recipiesCreate() {
+	const token = String(
+		typeof window !== "undefined" ? window.localStorage.getItem("token") : false
+	);
 	const initialRestaurantId = parseInt(
 		localStorage.getItem("restaurant_id") || "0"
 	);
 	const initialEmployeeId = parseInt(
 		localStorage.getItem("employee_id") || "0"
 	);
+	const { restaurantName } = useRestaurantName(token || "");
+	const { employeeName } = useEmployeeName(token || "");
+	console.log(employeeName);
+	console.log(restaurantName);
 	const router = useRouter();
 	const [formData, setFormData] = useState<RecipeFormData>({
 		restaurant_id: initialRestaurantId,
 		employee_id: initialEmployeeId,
+		editor_name: "",
 		title: "",
 		content_ingredients: "",
 		content_methods: "",
 	});
-	// const [errors, setErrors] = useState<Errors>({
-	// 	title: "",
-	// 	content_ingredients: "",
-	// 	content_methods: "",
-	// });
+	console.log(formData.editor_name);
+
+	useEffect(() => {
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			editor_name: restaurantName || employeeName || "",
+		}));
+	}, [restaurantName, employeeName]);
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
