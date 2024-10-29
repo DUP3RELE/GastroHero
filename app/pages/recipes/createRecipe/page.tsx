@@ -25,8 +25,7 @@ export default function recipiesCreate() {
 	);
 	const { restaurantName } = useRestaurantName(token || "");
 	const { employeeName } = useEmployeeName(token || "");
-	console.log(employeeName);
-	console.log(restaurantName);
+	
 	const router = useRouter();
 	const [formData, setFormData] = useState<RecipeFormData>({
 		restaurant_id: initialRestaurantId,
@@ -36,7 +35,6 @@ export default function recipiesCreate() {
 		content_ingredients: "",
 		content_methods: "",
 	});
-	console.log(formData.editor_name);
 
 	useEffect(() => {
 		setFormData((prevFormData) => ({
