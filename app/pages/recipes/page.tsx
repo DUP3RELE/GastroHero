@@ -31,6 +31,12 @@ export default function Recipies() {
 	const { restaurantName } = useRestaurantName(token || "");
 	const { employeeName } = useEmployeeName(token || "");
 	const { userType } = useAuth();
+	const initialRestaurantId = parseInt(
+		localStorage.getItem("restaurant_id") || "0"
+	);
+	const initialEmployeeId = parseInt(
+		localStorage.getItem("employee_id") || "0"
+	);
 
 	useEffect(() => {
 		fetchRecipes();
@@ -58,10 +64,13 @@ export default function Recipies() {
 					title: newTitle,
 					content_ingredients: newContent_ingredients,
 					content_methods: newContent_methods,
-					employee_id: parseInt(restaurantId),
+					restaurant_id: initialRestaurantId,
+					employee_id: initialEmployeeId,
+					editor_name: restaurantName || employeeName || "",
 				},
 				id
 			);
+
 			fetchRecipes();
 			setIsModalOpen(false);
 			setNewTitle("");

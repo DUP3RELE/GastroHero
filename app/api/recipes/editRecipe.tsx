@@ -5,6 +5,8 @@ export interface RecipeEditData {
 	content_ingredients: string;
 	content_methods: string;
 	employee_id: number;
+	restaurant_id: number;
+	editor_name: string;
 }
 
 export const editRecipe = async (
@@ -13,22 +15,18 @@ export const editRecipe = async (
 ) => {
 	const token = localStorage.getItem("token");
 	if (!token) {
-		console.error("Brak tokenu JWT.");
 		return;
 	}
 
 	try {
-		const response = await fetch(
-			`${BASE_API_URL}/edit_recipe/${recipeId}`,
-			{
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify(formData),
-			}
-		);
+		const response = await fetch(`${BASE_API_URL}/edit_recipe/${recipeId}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify(formData),
+		});
 
 		if (!response.ok) {
 			throw new Error("Nie udało się zaktualizować przepisu");
